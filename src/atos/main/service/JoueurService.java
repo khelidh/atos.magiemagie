@@ -93,6 +93,7 @@ public class JoueurService {
         else
             joueurDAO.update(joueur);
         
+        
     }
     
     
@@ -117,7 +118,13 @@ public class JoueurService {
         System.out.println("1 - Avatar 1");
         System.out.println("2 - Avatar 2");
         System.out.println("3 - Avatar 3");
-        avatar = scanner.nextInt();
+            try {
+                avatar = scanner.nextInt();
+            } catch (RuntimeException e) {
+                System.out.println("Vous avez surement fait une faute de frappe ! On vous remet ça ;)");
+                avatar = 0;
+            }
+        
         } while (avatar < 1 && avatar > 3);
         
         switch (avatar){

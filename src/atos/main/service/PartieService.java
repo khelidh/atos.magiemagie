@@ -621,7 +621,8 @@ public class PartieService {
                 + "\nQue voulez-vous faire ?");
         System.out.println("1 - Créer une partie"
                 + "\n2 - Rejoindre une partie"
-                + "\n3 - Aller dans son espace personnel");
+                + "\n3 - Aller dans son espace personnel"
+                + "\n4 - Quitter le jeu");
 
         Scanner scanner = new Scanner(System.in);
         int indice;
@@ -634,13 +635,17 @@ public class PartieService {
         } catch (IllegalArgumentException e) {
             return selectionActionDebutPartie();
         }
-        return indice;
+        if (indice > 0 && indice <= 4)
+            return indice;
+        return selectionActionDebutPartie();
     }
 
     public void application() {
-        while (true) {
+        boolean boucle = true;
+        while (boucle) {
+            
             int indice = selectionActionDebutPartie();
-
+            
             switch (indice) {
                 case 1:
                     String pseudo = serviceJoueur.selectionPseudo();
@@ -648,7 +653,7 @@ public class PartieService {
 
                     Partie partie = creer(pseudo, avatar);
                     System.out.println(pseudo + " vient de créer la partie " + partie.getNom() + " !");
-                    //updatePartie(partie);
+                    updatePartie(partie);
                     break;
 
                 case 2:
@@ -658,13 +663,11 @@ public class PartieService {
 
                     List<Partie> parties = partieDAO.findAllPartieEnPreparation();
 
-                    //List<Partie> parties = partieDAO.findAllPartieEnPreparation();
                     if (parties.size() != 0) {
-                        System.out.println("Partie =///= null");
                         for (Partie p : parties) {
                             System.out.println(i + " - La partie " + p.getNom() + " est en préparation. Il y a " + p.getJoueurs().size()
                                     + " joueur(s) pour le moment !");
-                            indice++;
+                            i++;
                         }
                         System.out.println("Quelle partie souhaitez-vous rejoindre ?");
                         txt = scanner.nextLine();
@@ -677,8 +680,8 @@ public class PartieService {
 
                         Partie partieChoisie = parties.get(indice - 1);
                         Long idPartie = partieChoisie.getId();
-                        serviceJoueur.rejoindrePartie(serviceJoueur.selectionPseudo(), serviceJoueur.selectionAvatar(), idPartie);
-
+                        rejoindrePartie(serviceJoueur.selectionPseudo(), serviceJoueur.selectionAvatar(), idPartie);
+                        //updatePartie(partieChoisie);
                         System.out.println("Vous avez rejoint la partie " + partieChoisie.getNom());
                         System.out.println("Voulez-vous faire débuter la partie à votre entrée ? y/n");
 
@@ -695,6 +698,7 @@ public class PartieService {
                         } else {
                             System.out.println("Vous êtes en attente dans une partie. Elle commencera lorque un des joueurs lancera celle-ci !"
                                     + "\nATTENTE !");
+                            break;
                         }
                     } else {
                         System.out.println("Il n'y a pas de partie disponible ! Créez-en une si vous voulez jouer ! ");
@@ -703,6 +707,12 @@ public class PartieService {
                 case 3:
                     System.out.println("ESPACE PERSONNEL ! SUPER !");
                     break;
+                case 4:
+                    System.out.println("Vous aller quitter le jeu !");
+                    if(selectionVerification()){
+                        boucle = false;
+                        System.out.println("Le jeu va se fermer ! Revenez-nous rapidement :)");
+                    }
                     
                 default:
                     return;
@@ -715,10 +725,33 @@ public class PartieService {
     public void listerPartieEnPreparation() {
         int indice = 0;
         for (Partie partie : partieDAO.findAllPartieEnPreparation()) {
-            indice++;
+            ++indice;
             System.out.println(indice + " - La partie " + partie.getNom() + " est en préparation. Il y a " + partie.getJoueurs().size()
                     + " joueurs pour le moment !");
         }
     }
-
+    public void rejoindrePartie(String pseudo, String avatar, Long idPartie){
+        
+        Joueur joueur = joueurDAO.findJoueurByPseudo(pseudo);
+        
+        // On choisit un avatar lorque l'on rejoint la partie
+        joueur.setAvatar(avatar);
+        
+        // Initialise les attributs du nouveau joueur
+        joueur.setEtat(EtatJoueur.EN_ATTENTE);
+        Long ordre = partieDAO.findLastPositionWithMax(idPartie);
+        joueur.setPosition(ordre + 1);
+        
+        Partie partie = partieDAO.findById(idPartie);
+        
+        joueur.setPartie(partie);
+        partie.getJoueurs().add(joueur);
+        
+        if(joueur.getId() == null)
+            joueurDAO.insert(joueur);
+        else
+            joueurDAO.update(joueur);
+        
+        updatePartie(partie);
+    }
 }
