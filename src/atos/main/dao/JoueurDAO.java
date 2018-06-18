@@ -55,9 +55,12 @@ public class JoueurDAO {
         String requete = ""
                 + " SELECT j"
                 + " FROM Joueur j"
-                + " WHERE j.partie.id = " + partie.getId();
+                + " WHERE j.partie.id = :idPartie";
 
         Query query = em.createQuery(requete);
+        
+        query.setParameter("idPartie", partie.getId());
+        
         return query.getResultList();
     }
     
@@ -93,13 +96,17 @@ public class JoueurDAO {
     }
     
     public Joueur findJoueurByPosition(Long position, Long idPartie){
-        EntityManager em = makeEM();
+        EntityManager em = Persistence.createEntityManagerFactory("PU").createEntityManager();
         String requete = "SELECT j"
                 + " FROM Joueur j"
-                + " WHERE j.position = " + position
-                + " AND j.partie.id = " + idPartie;
-        
+                + " WHERE j.position = :position"
+                + " AND j.partie.id = :idPartie";
+       
         Query query = em.createQuery(requete);
+        
+        query.setParameter("position", position);
+        query.setParameter("idPartie", idPartie);
+        
         return (Joueur) query.getSingleResult();
     }
     

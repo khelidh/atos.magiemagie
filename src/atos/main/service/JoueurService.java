@@ -26,6 +26,7 @@ public class JoueurService {
     PartieDAO partieDAO = new PartieDAO();
        
     public String mainToString(Joueur joueur){
+        
         int indice = 1;
         String chaine = "Main de " + joueur.getAvatar() + "  :";
         for (Carte carte : joueur.getCartes()){

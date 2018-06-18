@@ -6,6 +6,7 @@
 package atos.main.entity;
 
 import java.io.Serializable;
+import java.util.Random;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

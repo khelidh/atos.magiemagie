@@ -8,6 +8,7 @@ package atos.main.dao;
 import atos.main.entity.Joueur;
 import atos.main.entity.Joueur.EtatJoueur;
 import atos.main.entity.Partie;
+import atos.main.entity.Partie.EtatPartie;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -185,4 +186,13 @@ public class PartieDAO {
         return query.getResultList();
     }
     
+    public List<Partie> findAllPartieEnPreparation(){
+        String requete = "SELECT p FROM Partie p"
+                + " WHERE p.etat = :etatPreparation";
+        
+        Query query = makeEM().createQuery(requete);
+        query.setParameter("etatPreparation", EtatPartie.EN_PREPARATION);
+        
+        return query.getResultList();   
+    }
 }

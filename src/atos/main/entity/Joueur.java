@@ -74,7 +74,6 @@ public class Joueur implements Serializable {
     @Column(name = "Type", nullable = false)
     @Enumerated(EnumType.STRING)
     private EtatJoueur etat;
-    @Column(unique = true)
     private long position;
     private String pseudo;
     private String pass;
