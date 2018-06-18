@@ -1,0 +1,365 @@
+
+public class ServicesFinal2 {
+   //////////
+   // Gérance de la partie
+   ///////////
+   public boolean checkUpdate(Joueur joueur, Plateau plateau){
+       if (isMainVide(joueur))
+           eliminerJoueur(joueur,plateau);
+       if (isGameFinished(plateau)){
+           endGame(plateau);
+           return false;
+       }
+       return true;
+           
+   }
+   public boolean checkUpdateAll(Plateau plateau) {
+        ArrayList<Joueur> listeJoueurs = plateau.getJoueurs();
+        try {
+           for (Joueur joueur : listeJoueurs)
+            if (!checkUpdate(joueur, plateau))
+                return false;
+       } catch (Exception e) {
+            System.out.println("ERROR checkUpdateAll - checkForComodification ----------------------------------------------------------------------------------");
+       } 
+       return true;
+   }
+   /////////
+    ///////     JOUER
+   ////////////////////////////////////
+    public void jouerTour(Plateau plateau) {
+       
+       Joueur joueur = getJoueurDealer(plateau);
+       System.out.println("Tour " + plateau.getTour() + " de  " + joueur.getNom() + "   " + joueur.getId());
+       affichageCarte(joueur);
+       
+        if (selectionAction()){
+           int indiceCarte1 = selectionneCarte(joueur, plateau);
+           int indiceCarte2 = selectionneCarte(joueur, plateau);
+           
+           while (indiceCarte1 == indiceCarte2)
+                indiceCarte2 = selectionneCarte(joueur, plateau);
+
+           Carte carte1 = joueur.getCartes().get(indiceCarte1);
+           Carte carte2 = joueur.getCartes().get(indiceCarte2);
+
+           System.out.println("\nTypes des cartes sélectionnées : " + carte1.getType() + " && " +carte2.getType()); 
+
+           String sort = determineSortilege(plateau, carte1, carte2);
+         
+           System.out.println("Sort qui en découle --> " + sort);
+           
+           supprimeCartes(joueur, carte1, carte2);
+           
+           if (sort.equals(SORT_FAILED)) {
+               System.out.println("Cartes perdues -> " + carte1.getNom() + " et " + carte2.getNom());
+           } 
+           else 
+               lancerSortilege(sort,plateau);
+        }
+        else
+           ajouterCarteAleatoire(joueur);
+         
+        
+       
+       if (isGameFinished(plateau))
+            endGame(plateau);
+       else{
+           System.out.println("Tour de "+ joueur.getNom() +" terminé !");
+           System.out.println("\n");
+           if (checkUpdateAll(plateau)){
+                nextDealer(plateau);
+                jouer(plateau);
+           }
+       }   
+    }
+    public void jouerTourAleatoire(Plateau plateau){
+       
+       Joueur joueur = getJoueurDealer(plateau);
+      
+       System.out.println("Tour "+ plateau.getTour() +"\nAléatoire du Joueur  " + joueur.getNom());
+       affichageCarte(joueur);
+       
+      
+       int indice1 = (int) (Math.random() * joueur.getCartes().size());
+       int indice2 = (int) (Math.random() * joueur.getCartes().size());
+       while (indice1 == indice2){
+           indice2 = (int) (Math.random() * joueur.getCartes().size());
+       }
+       
+       Carte carte1 = joueur.getCartes().get(indice1);
+       Carte carte2 = joueur.getCartes().get(indice2);
+       
+       System.out.println("Types des cartes sélectionnées : " + carte1.getType() + " && " +carte2.getType());  
+       String sort = determineSortilege(plateau,carte1,carte2);
+       System.out.println("Sort qui en découle --> " + sort);
+       
+       supprimeCartes(joueur, carte1, carte2);
+       
+       if (sort.equals(SORT_FAILED))
+            System.out.println("Cartes perdues -> " + carte1.getNom() + " et " + carte2.getNom());   
+       else{
+           lancerSortilege(sort,plateau);
+       }
+           
+       
+       
+       if (isGameFinished(plateau))
+            endGame(plateau);
+       else{
+           System.out.println("Tour de "+ joueur.getNom() +" terminé !");
+           System.out.println("\n");
+           if (checkUpdateAll(plateau)) {
+               nextDealer(plateau);
+               jouer(plateau);
+           }
+       }   
+   }
+    public void jouer(Plateau plateau){
+        
+       System.out.println("**********************************************************************************************************************");
+       Joueur joueur = getJoueurDealer(plateau);
+           if (joueur.isSpellLocked()){
+                
+                joueur.decrementSpellLocked(1);
+                System.out.println(joueur.getNom() + " est en sommeil !\n"                    
+                        + "Il reste " + joueur.getSpellLocked()
+                        + " tour(s) de sommeil profond !");
+                nextDealer(plateau);
+                jouer(plateau);
+           }
+           else{
+               System.out.println("IS BOT ?  " + joueur.isBot());
+               if (joueur.isBot())
+                   if (joueur.getCartes().size() < 3){
+                       System.out.println("Joueur " + joueur.getNom());
+                       System.out.println("cartesBot 1 ou 2 -> PIOCHE");
+                        ajouterCarteAleatoire(joueur);
+                        nextDealer(plateau);
+                        jouer(plateau);
+                   }
+                   else
+                       jouerTourAleatoire(plateau);
+   
+               else
+                   jouerTour(plateau);
+           }       
+    }
+   // //Get carte du joueur : lui retire une carte aléatoirement
+   /////////////////////////////////////////
+   private Carte getCarteAleatoireFromJoueur(Joueur joueur) {
+        if (!isMainVide(joueur)){
+            int nombreCarte = joueur.getCartes().size();
+            int indice = (int) (Math.random() * nombreCarte);
+
+            Carte cartevolee = joueur.getCartes().get(indice);
+            System.out.println("Carte GETAleatoireCarte ==>> " + cartevolee.getNom() + " à " + joueur.getNom());
+            joueur.getCartes().remove(indice);
+
+            return cartevolee;
+        }
+        else
+            return null;
+   }
+   /////////////////////
+   //Sortilège
+   /////////////////////
+    public String determineSortilege(Plateau plateau, Carte carte1, Carte carte2){
+        Joueur joueur = getJoueurDealer(plateau);
+        Carte.TypeCarte type1 = carte1.getType();
+        Carte.TypeCarte type2 = carte2.getType();
+        String sort = "SORT_FAILED";
+        
+        if (type1.equals(Carte.TypeCarte.AILE_DE_CHAUVE_SOURIS)){
+            if (type2.equals(Carte.TypeCarte.MANDRAGORE))             
+                sort = SORT_SOMMEIL_PROFOND;
+            else if (type2.equals(Carte.TypeCarte.LAPIS_LAZULI))
+                sort = SORT_DIVINATION;
+        }
+        else if ((type1.equals(Carte.TypeCarte.MANDRAGORE))){
+            if (type2.equals(Carte.TypeCarte.AILE_DE_CHAUVE_SOURIS))
+                sort = SORT_SOMMEIL_PROFOND;
+            else if (type2.equals(Carte.TypeCarte.CORNE_DE_LICORNE))
+                sort = SORT_FILTRE_AMOUR;
+        }
+        else if ((type1.equals(Carte.TypeCarte.CORNE_DE_LICORNE))){
+            if (type2.equals(Carte.TypeCarte.MANDRAGORE))
+                sort = SORT_FILTRE_AMOUR;
+            else if (type2.equals(Carte.TypeCarte.BAVE_DE_CRAPAUD))
+                sort = SORT_INVISIBILITE;
+        }
+        else if ((type1.equals(Carte.TypeCarte.BAVE_DE_CRAPAUD))){
+            if (type2.equals(Carte.TypeCarte.CORNE_DE_LICORNE))
+                sort = SORT_INVISIBILITE;
+            else if (type2.equals(Carte.TypeCarte.LAPIS_LAZULI))
+               sort = SORT_HYPSNOSE;
+        }
+        else if ((type1.equals(Carte.TypeCarte.LAPIS_LAZULI))){
+            if (type2.equals(Carte.TypeCarte.BAVE_DE_CRAPAUD))
+               sort = SORT_HYPSNOSE;
+            else if (type2.equals(Carte.TypeCarte.AILE_DE_CHAUVE_SOURIS))
+                sort = SORT_DIVINATION;
+        }   
+        return sort;
+    }
+    public void supprimeCartes(Joueur joueur, Carte carte1, Carte carte2){
+        retirerCarte(joueur, carte1);
+        retirerCarte(joueur, carte2);
+    }
+    public void lancerSortilege(String sort,Plateau plateau){
+        Joueur racaille = getJoueurDealer(plateau);
+        switch (sort) {
+            case (SORT_INVISIBILITE) :{
+                lancerSortInvisibilite(plateau);
+                break;
+            }
+            case (SORT_HYPSNOSE) :{
+                Joueur cible;
+                if (!racaille.isBot())
+                    cible = plateau.getJoueur(selectionneCible(plateau));
+                else
+                    cible = selectionCibleAleatoire(plateau);
+                
+                lancerSortHypnose(cible, plateau);
+                break;
+            }
+            case (SORT_DIVINATION) :{
+                lancerSortDivination(plateau);          
+                break;
+            }
+            case (SORT_SOMMEIL_PROFOND) :{
+                Joueur cible;
+                if (!racaille.isBot())
+                    cible = plateau.getJoueur(selectionneCible(plateau));
+                else
+                    cible = selectionCibleAleatoire(plateau);
+                lancerSortSommeilProfond(cible);
+                break;
+            }
+            case (SORT_FILTRE_AMOUR) :{
+                Joueur cible;
+                if (!racaille.isBot())
+                    cible = plateau.getJoueur(selectionneCible(plateau));
+                else
+                    cible = selectionCibleAleatoire(plateau);
+                lancerSortFiltreAmour(cible,plateau);
+                break;
+            }
+        }
+    }
+    /////////////
+    // Sorts
+    /////////////
+    private void lancerSortInvisibilite(Plateau plateau){
+        Joueur racaille = getJoueurDealer(plateau);
+        
+        for (Joueur joueur : plateau.getJoueurs())
+            if (!(racaille == joueur)){
+                if (!isMainVide(joueur)){
+                    Carte carteVolee = getCarteAleatoireFromJoueur(joueur);
+                    ajouterCarte(racaille, carteVolee);
+                }
+            }  
+    }
+    private void lancerSortHypnose(Joueur cible, Plateau plateau) {
+        Joueur racaille = getJoueurDealer(plateau);
+        int limiteCartePrises = 3;
+        
+        Carte carteJetee;
+        if (racaille.isBot())
+            carteJetee = getCarteAleatoireFromJoueur(racaille);
+        else
+            carteJetee = racaille.getCartes().get(selectionneCarte(racaille, plateau));
+            
+
+        for (int i = 0; i < limiteCartePrises; i++){
+            if (!isMainVide(cible))
+                racaille.getCartes().add(getCarteAleatoireFromJoueur(cible));
+        }     
+        
+        if (carteJetee != null){
+            cible.getCartes().add(carteJetee);  
+            racaille.getCartes().remove(carteJetee);}
+    }
+    private void lancerSortDivination(Plateau plateau) {  
+        Joueur racaille = getJoueurDealer(plateau);
+        for (Joueur joueur : plateau.getJoueurs())
+            if (racaille != joueur)
+                affichageCarte(joueur);     
+    }
+    private void lancerSortSommeilProfond(Joueur cible) {
+        cible.incrementSpellLocked(2);
+    }
+    private void lancerSortFiltreAmour(Joueur cible, Plateau plateau) {
+        Joueur racaille = getJoueurDealer(plateau);
+        int moitieDeckCible = (int) (cible.getCartes().size()/2);
+        
+        if (moitieDeckCible == 0)
+            eliminerJoueur(cible,plateau);
+        else
+            for (int i = 0; i< moitieDeckCible; i++){
+               if (!isMainVide(cible))
+                    racaille.getCartes().add(getCarteAleatoireFromJoueur(cible));        
+            }                 
+    }
+    private void lancerSortFailed(Joueur joueur, Carte carte1, Carte carte2) {
+        System.out.println("Cartes perdues -> " + carte1.getNom() + " et " + carte2.getNom());
+        supprimeCartes(joueur, carte1, carte2);
+        affichageCarte(joueur);
+    }
+    
+    ///////////
+    // Sélection avec SCANNER
+    /////////////////////////////////////////
+    public int selectionneCible(Plateau plateau){
+        Joueur joueur = getJoueurDealer(plateau);
+        System.out.println("SCANNER - Sélectionner cible entre 0 et " + (getNombreJoueur(plateau)-1) );
+        Scanner scanner = new Scanner(System.in);
+        
+        int indice;
+        
+        do { 
+        String txt = scanner.nextLine();
+        indice = Integer.parseInt(txt);
+        }
+        while (plateau.getJoueur(indice) == joueur);
+        
+        System.out.println("Cible sélectionnée -> " + plateau.getJoueur(indice).getNom());
+        return indice;
+    }
+    public int selectionneCarte(Joueur joueur, Plateau plateau){
+        System.out.println("SCANNER - Sélectionner carte de " + joueur.getNom() + " entre 0 et "  + (joueur.getCartes().size() -1) );
+        Scanner scanner = new Scanner(System.in); 
+
+        String txt = scanner.nextLine();
+        int indice = Integer.parseInt(txt);
+  
+        System.out.println("Carte sélectionnée -> " + joueur.getCartes().get(indice).getType());
+        return indice;
+    }
+    // true si on veut jouer, false si on passe notre tour
+    public boolean selectionAction(){
+        System.out.println("SELECTION ACTION : 1- Jouer Combo");
+        System.out.println("SELECTION ACTION : 2- Piocher & passer");
+        Scanner scanner = new Scanner(System.in);
+       
+        String txt = scanner.nextLine();
+        int indice = Integer.parseInt(txt);
+        
+        return indice == 1;
+    }
+    public Joueur selectionCibleAleatoire(Plateau plateau){
+       Joueur joueur = getJoueurDealer(plateau);
+       int indice = (int) (Math.random() * plateau.getJoueurs().size());
+       
+       while (joueur == plateau.getJoueur(indice)){
+           indice = (int) (Math.random() * plateau.getJoueurs().size());
+       }
+       System.out.println("Cible sélectionnée -> " + plateau.getJoueur(indice).getNom());
+       return plateau.getJoueur(indice);
+   }  
+}
+
+    
+
+
