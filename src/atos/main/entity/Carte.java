@@ -35,11 +35,6 @@ public class Carte implements Serializable {
         this.type = type;
         this.joueur = joueur;
     }
-    public Carte(Joueur joueur) {
-        int indiceType = (int) (Math.random()*TypeCarte.values().length);    
-        this.type = TypeCarte.values()[indiceType];
-        this.joueur = joueur;
-    }
     
     /////////////////////////////////
     // AutoIncrement ID

@@ -20,7 +20,7 @@ import javax.persistence.Query;
  */
 public class JoueurDAO {
     
-    public EntityManager makeEM(){
+    private EntityManager makeEM(){
         return Persistence.createEntityManagerFactory("PU").createEntityManager();
     }
     
@@ -38,30 +38,17 @@ public class JoueurDAO {
         em.getTransaction().commit();
     }
     
-    public Long findPartieID(Long idJoueur){
+    public Joueur findById(long id){
+        return (Joueur) makeEM().find(Joueur.class, id);
+    }
+    
+    public Long findPartieIDFromJoueurID(Long idJoueur){
         String requete = "SELECT j.partie.id"
                 + "     FROM Joueur j"
                 + "     WHERE j.id = :idJoueur";
         Query query = makeEM().createQuery(requete);
         query.setParameter("idJoueur", idJoueur);
         return (Long) query.getSingleResult();
-    }
-    
-    public Joueur findById(long id){
-        return (Joueur) makeEM().find(Joueur.class, id);
-    }
-    public List<Joueur> findAllFromPartie(Partie partie){
-        EntityManager em = makeEM();
-        String requete = ""
-                + " SELECT j"
-                + " FROM Joueur j"
-                + " WHERE j.partie.id = :idPartie";
-
-        Query query = em.createQuery(requete);
-        
-        query.setParameter("idPartie", partie.getId());
-        
-        return query.getResultList();
     }
     
     public List<Joueur> findAllFromPartieExecptOne(Joueur joueur){
@@ -81,33 +68,12 @@ public class JoueurDAO {
         query.setParameter("etatJoueur3", EtatJoueur.A_LA_MAIN);
         return query.getResultList();
     }
+    
     public void update(Joueur joueur){
         EntityManager em = makeEM();
         em.getTransaction().begin();
         em.merge(joueur);
         em.getTransaction().commit();
-    }
-    public void update(ArrayList<Joueur> joueurs){
-        EntityManager em = makeEM();
-        em.getTransaction().begin();
-        for (Joueur joueur : joueurs)
-            em.merge(joueur);
-        em.getTransaction().commit();
-    }
-    
-    public Joueur findJoueurByPosition(Long position, Long idPartie){
-        EntityManager em = Persistence.createEntityManagerFactory("PU").createEntityManager();
-        String requete = "SELECT j"
-                + " FROM Joueur j"
-                + " WHERE j.position = :position"
-                + " AND j.partie.id = :idPartie";
-       
-        Query query = em.createQuery(requete);
-        
-        query.setParameter("position", position);
-        query.setParameter("idPartie", idPartie);
-        
-        return (Joueur) query.getSingleResult();
     }
     
     /**
@@ -115,7 +81,6 @@ public class JoueurDAO {
      * S'il n'existe pas, on renvoie un nouvel objet Joueur avec le pseudo.
      * @param String pseudo
      * @return Joueur joueur
- 
      */
     public Joueur findJoueurByPseudo(String pseudo){
         EntityManager em = makeEM();
@@ -136,6 +101,4 @@ public class JoueurDAO {
         
         return joueur;
     }
-    
-    
 }

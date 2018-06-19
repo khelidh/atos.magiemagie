@@ -7,6 +7,7 @@ package atos.main.service;
 
 import atos.main.dao.PartieDAO;
 import atos.main.entity.Joueur;
+import atos.main.interfaceswing.InterfaceGraphique;
 import atos.main.service.CarteService;
 import atos.main.service.JoueurService;
 import atos.main.service.PartieService;
@@ -29,7 +30,7 @@ public class Main {
 //        serviceJoueur.rejoindrePartie("Kobi", "K", idPartie);
 //        serviceJoueur.rejoindrePartie("Faramir", "F", idPartie);
 //        serviceJoueur.rejoindrePartie("Hobbit", "H", idPartie);
-             
-        servicePartie.application();
+          new InterfaceGraphique("- Magie Magie -");
+        //servicePartie.application();
     }
 }

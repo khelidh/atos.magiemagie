@@ -62,33 +62,4 @@ public class CarteDAO {
     public Carte findById(Long id){
         return makeEM().find(Carte.class, id);
     }
-    public Carte findByTypeAndID(TypeCarte type, Long idJoueur){
-        
-        EntityManager em = makeEM();
-        
-        String requete = "SELECT c FROM Carte"
-                + " WHERE c.joueur.id = " + idJoueur
-                + " AND c.type = :param";
-        
-        Query query = em.createQuery(requete);
-        query.setParameter("param", type);
-        
-        List<Carte> cartes = query.getResultList();
-        
-        return cartes.get(0);  
-    }
-    public long findIdByTypeAndID(TypeCarte type, Long idJoueur){
-        EntityManager em = makeEM();
-        String requete = "SELECT c FROM Carte"
-                + " WHERE c.joueur.id = " + idJoueur
-                + " AND c.type = :param";
-        
-        Query query = em.createQuery(requete);
-        query.setParameter("param", type);
-        List<Carte> cartes = query.getResultList();
-        
-        return cartes.get(0).getId();  
-    }
-
-    
 }

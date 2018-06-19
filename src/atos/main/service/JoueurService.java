@@ -68,34 +68,6 @@ public class JoueurService {
         serviceCarte.deleteCarte(carte2);
         updateJoueur(joueur);
     }
-    /////////////////////////////////////////////////////////////////////////////
-    //      On rejoint la partie en créant le joueur si besoin
-    //
-    public void rejoindrePartie(String pseudo, String avatar, Long idPartie){
-        
-        Joueur joueur = joueurDAO.findJoueurByPseudo(pseudo);
-        
-        // On choisit un avatar lorque l'on rejoint la partie
-        joueur.setAvatar(avatar);
-        
-        // Initialise les attributs du nouveau joueur
-        joueur.setEtat(EtatJoueur.EN_ATTENTE);
-        Long ordre = partieDAO.findLastPositionWithMax(idPartie);
-        joueur.setPosition(ordre + 1);
-        
-        Partie partie = partieDAO.findById(idPartie);
-        
-        joueur.setPartie(partie);
-        partie.getJoueurs().add(joueur);
-        
-        if(joueur.getId() == null)
-            joueurDAO.insert(joueur);
-        else
-            joueurDAO.update(joueur);
-        
-        
-    }
-    
     
     public String selectionPseudo(){
         String txt;
@@ -137,5 +109,4 @@ public class JoueurService {
         }
         return "Avatar inconnu";
     }
-    
 }

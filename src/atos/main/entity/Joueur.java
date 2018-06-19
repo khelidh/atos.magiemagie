@@ -39,16 +39,6 @@ public class Joueur implements Serializable {
         this.partiesGagnees = 0;
         this.partiesJouees = 0;
     }
-    public Joueur(String pseudo, long position) {
-        this.etat = EtatJoueur.EN_ATTENTE;
-        this.position = position;
-        this.partie = null;
-        this.pseudo = pseudo;
-        this.pass = "pass" + pseudo;
-        this.avatar = "avatar" + pseudo;
-        this.partiesGagnees = 0;
-        this.partiesJouees = 0;
-    }
     
     /////////////////////////////////
     // AutoIncrement ID

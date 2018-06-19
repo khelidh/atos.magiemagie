@@ -57,6 +57,7 @@ public class PartieDAO {
     
         return query.getResultList();
     }
+    
     public Long findNombreJoueurEnLice(Long idPartie){
         String requete = "SELECT COUNT(j)"
                 + "     FROM Joueur j"
@@ -87,7 +88,8 @@ public class PartieDAO {
             position = 1;
         }
         return position;
-    }   
+    }  
+    
     public Long findNombreJoueurEnAttente(Long idPartie){
         
         String requete = "SELECT count(j) FROM Joueur j"
@@ -107,6 +109,7 @@ public class PartieDAO {
         return result;
         
     }
+    
     public Long findDealerID(Long idPartie){
         String requete = "SELECT j.id"
                 + "     FROM Joueur j"
@@ -119,27 +122,11 @@ public class PartieDAO {
         
         return (Long) query.getSingleResult();
     }
-    public Long findNextDealerPosition(Joueur dealer){
-        String requete = "SELECT MIN(j.position)"
-                + " FROM Joueur j"
-                + " WHERE j.partie.id = :idPartie"
-                + " AND j.etat in(:etatPasLaMain, :etatSommeil)"
-                + " AND j.position > :position";
-        
-        Query query = makeEM().createQuery(requete);
-        
-        query.setParameter("position", dealer.getPosition());
-        query.setParameter("idPartie", dealer.getPartie().getId());
-        query.setParameter("etatPasLaMain", Joueur.EtatJoueur.PAS_LA_MAIN);
-        query.setParameter("etatSommeil", Joueur.EtatJoueur.EN_SOMMEIL);
-        
-        return (Long) query.getSingleResult();   
-    }
     
     /**
      *  Renvoies le prochain joueur toujours actif dans le jeu : PAS_LA_MAIN ou EN_SOMMEIL
-     * @param dealer
-     * @return (Joueur) nextDealer
+     * @param Joueur dealer
+     * @return Joueur nextDealer
      */
     public Joueur findNextDealer(Joueur dealer){
         String requete = ""
