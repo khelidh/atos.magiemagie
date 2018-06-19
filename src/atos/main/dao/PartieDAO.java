@@ -182,4 +182,17 @@ public class PartieDAO {
         
         return query.getResultList();   
     }
+    
+    public Joueur findJoueurByPosition(Long idPartie, Long position){
+        String requete = "SELECT j FROM Joueur j"
+                + "     WHERE j.position = :position"
+                + "     AND j.partie.id = :idPartie";
+        
+        Query query = makeEM().createQuery(requete);
+        query.setParameter("postion", position);
+        query.setParameter("idPartie", idPartie);
+        
+        return (Joueur) query.getSingleResult(); 
+        
+    }
 }

@@ -640,6 +640,14 @@ public class PartieService {
     public Joueur getJoueur(Long idJoueur) {
         return joueurDAO.findById(idJoueur);
     }
+    
+    public List<Partie> getPartiesEnPrepapration(){
+        return partieDAO.findAllPartieEnPreparation();
+    }
+    
+    public Joueur getJoueurByPosition(Long idPartie, Long position){
+        return partieDAO.findJoueurByPosition(idPartie, position);
+    }
 
     ///////////////////////
     //  UPDATE
