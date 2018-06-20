@@ -39,7 +39,6 @@ public class Joueur implements Serializable {
         this.partiesGagnees = 0;
         this.partiesJouees = 0;
     }
-    
     /////////////////////////////////
     // AutoIncrement ID
     /////////////////////////////////
@@ -47,9 +46,8 @@ public class Joueur implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    ///////////////////
-    //ENUM
+    //////////////////////////////
+    //  enum
     public enum EtatJoueur {
         EN_ATTENTE,
         A_LA_MAIN,

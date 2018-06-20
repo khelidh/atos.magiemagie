@@ -11,6 +11,8 @@ import atos.main.interfaceswing.InterfaceGraphique;
 import atos.main.service.CarteService;
 import atos.main.service.JoueurService;
 import atos.main.service.PartieService;
+import java.awt.HeadlessException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -19,10 +21,10 @@ import java.util.ArrayList;
  */
 public class Main {
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws HeadlessException, IOException {
         PartieService servicePartie = new PartieService();
         JoueurService serviceJoueur = new JoueurService();
-          CarteService serviceCarte = new CarteService();
+        CarteService serviceCarte = new CarteService();
         
         //Long idPartie = 1L;
        
@@ -31,6 +33,6 @@ public class Main {
 //        serviceJoueur.rejoindrePartie("Faramir", "F", idPartie);
 //        serviceJoueur.rejoindrePartie("Hobbit", "H", idPartie);
           new InterfaceGraphique("- Magie Magie -");
-          servicePartie.application();
+          //servicePartie.application();
     }
 }

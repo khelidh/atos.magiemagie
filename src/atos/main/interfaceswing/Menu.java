@@ -18,6 +18,7 @@ import javax.swing.KeyStroke;
 public class Menu extends JMenuBar {
 
     public JMenu menuJouer, menuProfil, menuOptions, menuQuitter;
+    public JMenuItem itemJouer1, itemJouer2;
     
     public Menu() {
         menuJouer = new JMenu("Jouer");
@@ -26,9 +27,9 @@ public class Menu extends JMenuBar {
         menuQuitter = new JMenu("Quitter");
         
         String txt_itemJouer1 = "Créer une partie";
-        JMenuItem itemJouer1 = new JMenuItem(txt_itemJouer1);
+        itemJouer1 = new JMenuItem(txt_itemJouer1);
         String txt_itemJouer2 = "Rejoindre une partie";
-        JMenuItem itemJouer2 = new JMenuItem(txt_itemJouer2);
+        itemJouer2 = new JMenuItem(txt_itemJouer2);
         String txt_itemJouer3 = "Charger une partie";
         JMenuItem itemJouer3 = new JMenuItem(txt_itemJouer3);
         

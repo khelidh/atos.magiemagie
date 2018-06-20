@@ -51,14 +51,15 @@ public class PartieService {
     ///////////////////////
     //  Gérance de la création & de l'état de la partie
     /////////////////////
-    public Partie creer(String pseudo, String avatar) {
-        Partie partie = new Partie("Partie speciale");
+    public Partie creer(String partieNom, String pseudo, String avatar) {
+        Partie partie = new Partie(partieNom);
+        
         Joueur joueur = joueurDAO.findJoueurByPseudo(pseudo);
 
         joueur.setAvatar(avatar);
         joueur.setEtat(EtatJoueur.EN_ATTENTE);
         joueur.setPosition(0);
-
+        
         partieDAO.insert(partie);
 
         partie.getJoueurs().add(joueur);
@@ -69,7 +70,7 @@ public class PartieService {
         } else {
             serviceJoueur.updateJoueur(joueur);
         }
-
+        
         return partie;
     }
 
@@ -696,7 +697,7 @@ public class PartieService {
                     String pseudo = serviceJoueur.selectionPseudo();
                     String avatar = serviceJoueur.selectionAvatar();
 
-                    Partie partie = creer(pseudo, avatar);
+                    Partie partie = creer("Partie spéciale", pseudo, avatar);
                     System.out.println(pseudo + " vient de créer la partie " + partie.getNom() + " !");
                     updatePartie(partie);
                     break;

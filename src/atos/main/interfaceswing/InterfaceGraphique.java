@@ -5,7 +5,7 @@
  */
 package atos.main.interfaceswing;
 
-import atos.main.interfaceswing.panel.PanelAffichagePartie;
+import atos.main.interfaceswing.panel.PanelPartieAffichage;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -13,6 +13,8 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import javafx.application.Application;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -23,7 +25,7 @@ import javax.swing.JMenuItem;
  */
 public class InterfaceGraphique extends JFrame {
 
-    public InterfaceGraphique(String title) throws HeadlessException {
+    public InterfaceGraphique(String title) throws HeadlessException, IOException {
         super(title);
 
         //Calcul de la taille effective de l'écran utilisateur
@@ -36,28 +38,25 @@ public class InterfaceGraphique extends JFrame {
         int width = screenSize.width;
         
         // Initialisation de la fenêtre
-        setSize(width, height);
+        setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         PanelPrincipal panelPrincipal = new PanelPrincipal();
-        
         Menu menu = new Menu();
-        
-        JMenuItem itemRejoindre = (JMenuItem) menu.menuJouer.getItem(1);
-        
-        itemRejoindre.addActionListener(new ActionListener() {
+        menu.itemJouer1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    panelPrincipal.container.removeAll();
-                    panelPrincipal.container.add(panelPrincipal.listerParties());
-                } catch (NullPointerException ex) {
-                }
+                panelPrincipal.addPanelCreationPartie();
                 
-                repaint();
             }
         });
         
+        menu.itemJouer2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panelPrincipal.addPanelAffichageParties();
+            }
+        });
         
         // Personnalisation
         this.add(panelPrincipal);
