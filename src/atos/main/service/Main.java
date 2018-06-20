@@ -7,7 +7,7 @@ package atos.main.service;
 
 import atos.main.dao.PartieDAO;
 import atos.main.entity.Joueur;
-import atos.main.interfaceswing.InterfaceGraphique;
+import atos.main.interfaceswing.frame.InterfaceGraphique;
 import atos.main.service.CarteService;
 import atos.main.service.JoueurService;
 import atos.main.service.PartieService;

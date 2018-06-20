@@ -6,11 +6,15 @@
 package atos.main.interfaceswing.panel;
 
 import atos.main.service.PartieService;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.chart.Axis;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -20,7 +24,7 @@ import javax.swing.JPanel;
  *
  * @author Administrateur
  */
-public class PanelCreationPartie extends JPanel{
+public class PanelCreerPartie extends JPanel{
     
     PartieService partieService = new PartieService();
     
@@ -28,7 +32,10 @@ public class PanelCreationPartie extends JPanel{
     TextField nomPartie_txt, nomCreateur_txt, avatarCreateur_txt;
     JButton boutonReset, boutonValider;
     
-    public PanelCreationPartie() {
+    public PanelCreerPartie() {
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        
+        
         String nomPartie_string = "Nom de la partie";
         String nomCreateur_string = "Nom de votre personnage";
         String avatarCreateur_string = "Sélectionnez un avatar pour cette partie";
@@ -44,17 +51,32 @@ public class PanelCreationPartie extends JPanel{
         this.boutonReset = new JButton("Reset");
         this.boutonValider = new JButton("Valider");
         
-        this.add(nomPartie);
-        this.add(nomPartie_txt);
+        JPanel panel1 = new JPanel();
+        panel1.setLayout(new BorderLayout());
+        panel1.add(nomPartie,BorderLayout.NORTH);
+        //nomPartie.setPreferredSize(new Dimension(getWidth(), getHeight()));
+        panel1.add(nomPartie_txt, BorderLayout.SOUTH);
    
-        this.add(nomCreateur);
-        this.add(nomCreateur_txt);
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(new BorderLayout());
+        panel2.add(nomCreateur, BorderLayout.NORTH);
+        panel2.add(nomCreateur_txt, BorderLayout.SOUTH);
    
-        this.add(avatarCreateur);
-        this.add(avatarCreateur_txt);
+        JPanel panel3 = new JPanel();
+        panel3.setLayout(new BorderLayout());
+        panel3.add(avatarCreateur, BorderLayout.NORTH);
+        panel3.add(avatarCreateur_txt, BorderLayout.SOUTH);
         
-        this.add(boutonReset);
-        this.add(boutonValider);
+        JPanel panel4 = new JPanel();
+        panel4.setLayout(new BorderLayout());
+        panel4.add(boutonReset, BorderLayout.NORTH);
+        panel4.add(boutonValider, BorderLayout.SOUTH);
+        
+        
+        this.add(panel1);
+        this.add(panel2);
+        this.add(panel3);
+        this.add(panel4);
    
         
         this.boutonReset.addActionListener(boutonResetListener);
@@ -63,10 +85,9 @@ public class PanelCreationPartie extends JPanel{
     
     public void resetAll(){
         System.out.println("REST");
-        this.nomPartie_txt.setText("");
-        this.nomCreateur_txt.setText("");
-        this.avatarCreateur_txt.setText("");
-        this.repaint();
+        this.nomPartie_txt.setText(" ");
+        this.nomCreateur_txt.setText(" ");
+        this.avatarCreateur_txt.setText(" ");
     }
     
     public void valider(){
@@ -82,6 +103,7 @@ public class PanelCreationPartie extends JPanel{
         @Override
         public void actionPerformed(ActionEvent e) {
             resetAll();
+            
         }
     };
     ActionListener boutonValiderListener = new ActionListener() {
