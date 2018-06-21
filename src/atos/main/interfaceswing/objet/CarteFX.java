@@ -6,15 +6,13 @@
 package atos.main.interfaceswing.objet;
 
 import atos.main.entity.Carte;
+import atos.main.entity.Carte.TypeCarte;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-
 /**
  *
  * @author Administrateur
@@ -23,9 +21,17 @@ public class CarteFX extends JLabel{
     
     private ImageIcon imgICON;
     List<Long> idCartes = new ArrayList<>();
-
    
-
+    public CarteFX(TypeCarte type, int witdth, int height){
+        String cheminCarteMandragore = "/atos/main/interfaceswing/image/carte_mandragore.png";
+        this.imgICON = new ImageIcon(getClass().getResource(cheminCarteMandragore));
+        Image image = imgICON.getImage();
+        image = image.getScaledInstance(witdth, height, java.awt.Image.SCALE_SMOOTH);
+        this.imgICON = new ImageIcon(image);
+        
+        this.setIcon(this.imgICON);
+    }
+    
     public CarteFX() {
         
         String cheminCarteMandragore = "/atos/main/interfaceswing/image/carte_mandragore.png";
@@ -77,5 +83,4 @@ public class CarteFX extends JLabel{
     private void remove(Carte carte){
         this.idCartes.remove(carte.getId());
     }
-    
 }

@@ -43,4 +43,9 @@ public class CarteService {
     void deleteCarte(Carte carte) {
         carteDAO.delete(carte);
     }
+    
+    public Long getNombreCarte(Long idJoueur, TypeCarte type){
+        return carteDAO.findNombreCarte(idJoueur, type);
+    }
+
 }

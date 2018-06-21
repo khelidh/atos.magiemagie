@@ -7,13 +7,9 @@ package atos.main.interfaceswing.panel;
 
 import atos.main.service.PartieService;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import javafx.scene.chart.Axis;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
- *
  * @author Administrateur
  */
 public class PanelCreerPartie extends JPanel{
@@ -103,7 +98,6 @@ public class PanelCreerPartie extends JPanel{
         @Override
         public void actionPerformed(ActionEvent e) {
             resetAll();
-            
         }
     };
     ActionListener boutonValiderListener = new ActionListener() {

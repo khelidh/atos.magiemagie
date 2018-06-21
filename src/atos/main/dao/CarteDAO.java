@@ -8,12 +8,10 @@ package atos.main.dao;
 import atos.main.entity.Carte;
 import atos.main.entity.Carte.TypeCarte;
 import atos.main.entity.Joueur;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-
 
 /**
  * @author mama
@@ -62,4 +60,24 @@ public class CarteDAO {
     public Carte findById(Long id){
         return makeEM().find(Carte.class, id);
     }
+    public Long findNombreCarte(Long idJoueur, TypeCarte type){
+        String requete = "SELECT COUNT(c) FROM Carte c"
+                + "         JOIN c.joueur j"
+                + "         WHERE j.id = :idJoueur"
+                + "         AND c.type = :type";
+        
+        Query query = makeEM().createQuery(requete);
+        query.setParameter("idJoueur", idJoueur);
+        query.setParameter("type", type);
+        
+        Long res;
+        try {
+            res = (Long) query.getSingleResult();
+        } catch (Exception e) {
+            res = 0L;
+        }
+        return res;
+    }
 }
+
+

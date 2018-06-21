@@ -158,7 +158,6 @@ public class PartieDAO {
     }
     
     public List<Joueur> findJoueursOrderByPosition(Long idPartie){
-        
         String requete = "SELECT j"
                 + "     FROM Joueur j"
                 + "     WHERE j.partie.id = :idPartie"
@@ -189,11 +188,30 @@ public class PartieDAO {
                 + "     WHERE j.position = :position"
                 + "     AND p.id = :idPartie";
         
+        
+        String req = "SELECT j FROM Joueur j"
+                + "     WHERE j.position = :position"
+                + "     AND j.partie.id = :idPartie";
+        
+        
         Query query = makeEM().createQuery(requete);
         query.setParameter("position", position);
         query.setParameter("idPartie", idPartie);
         
-        return (Joueur) query.getSingleResult(); 
+        return (Joueur) query.getSingleResult();
+    }
+
+    public Joueur findJoueurFirstPosition(Long idPartie) {
+        String requete = "SELECT j FROM Joueur j"
+                + "     JOIN j.partie p"
+                + "     WHERE p.id = :idPartie"
+                + "     ORDER BY j.position ASC";
         
+        Query query = makeEM().createQuery(requete);
+        query.setParameter("idPartie", idPartie);
+        
+        query.setMaxResults(1);
+        
+        return (Joueur) query.getSingleResult();
     }
 }
