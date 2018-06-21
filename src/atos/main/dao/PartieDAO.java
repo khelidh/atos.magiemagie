@@ -5,6 +5,7 @@
  */
 package atos.main.dao;
 
+import atos.main.entity.Carte;
 import atos.main.entity.Joueur;
 import atos.main.entity.Joueur.EtatJoueur;
 import atos.main.entity.Partie;
@@ -214,4 +215,5 @@ public class PartieDAO {
         
         return (Joueur) query.getSingleResult();
     }
+
 }

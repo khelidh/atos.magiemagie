@@ -11,6 +11,7 @@ import atos.main.interfaceswing.menu.Menu;
 import atos.main.interfaceswing.panel.PanelAffichagePartie;
 import atos.main.interfaceswing.panel.PanelCreerPartie;
 import atos.main.interfaceswing.panel.PanelJoueur;
+import atos.main.interfaceswing.panel.PanelMainJoueur;
 import atos.main.service.JoueurService;
 import atos.main.service.PartieService;
 import java.awt.BorderLayout;
@@ -101,7 +102,7 @@ public class InterfaceGraphique extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             container.removeAll();
-            container.add(new PanelJoueur(1L));
+            container.add(new PanelMainJoueur());
             container.revalidate();
             container.repaint();
         }
