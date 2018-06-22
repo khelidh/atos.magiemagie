@@ -5,12 +5,10 @@
  */
 package atos.main.dao;
 
-import atos.main.entity.Carte;
 import atos.main.entity.Joueur;
 import atos.main.entity.Joueur.EtatJoueur;
 import atos.main.entity.Partie;
 import atos.main.entity.Partie.EtatPartie;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -126,7 +124,7 @@ public class PartieDAO {
     
     /**
      *  Renvoies le prochain joueur toujours actif dans le jeu : PAS_LA_MAIN ou EN_SOMMEIL
-     * @param Joueur dealer
+     * @param dealer
      * @return Joueur nextDealer
      */
     public Joueur findNextDealer(Joueur dealer){
@@ -214,6 +212,32 @@ public class PartieDAO {
         query.setMaxResults(1);
         
         return (Joueur) query.getSingleResult();
+    }
+
+    public Joueur findJoueurALaMain(Long idPartie) {
+        String requete = "SELECT j FROM Joueur j"
+                + "     JOIN j.partie p"
+                + "     WHERE p.id = :idPartie"
+                + "     AND j.etat = :etat";
+        
+        Query query = makeEM().createQuery(requete);
+        query.setParameter("idPartie", idPartie);
+        query.setParameter("etat", EtatJoueur.A_LA_MAIN);
+        
+        query.setMaxResults(1);
+        
+        return (Joueur) query.getSingleResult();
+    }
+
+    public int findNombreCartesJoueur(Long idJoueur) {
+         String requete = "SELECT count(c) FROM Carte c"
+                 + "        JOIN c.joueur j"
+                 + "        WHERE j.id = :idJoueur";
+        
+        Query query = makeEM().createQuery(requete);
+        query.setParameter("idJoueur", idJoueur);
+        
+        return (int) query.getSingleResult();
     }
 
 }

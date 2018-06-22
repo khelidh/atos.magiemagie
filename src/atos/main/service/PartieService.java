@@ -634,8 +634,12 @@ public class PartieService {
         return partie.getJoueurs();
     }
 
-    private List<Joueur> getJoueurs(Long idPartie) {
+    public List<Joueur> getJoueurs(Long idPartie) {
         return partieDAO.findJoueurEnLice(idPartie);
+    }
+    
+    public Joueur getJoueurALaMain(Long idPartie){
+        return partieDAO.findJoueurALaMain(idPartie);
     }
 
     public Joueur getJoueur(Long idJoueur) {
@@ -778,6 +782,10 @@ public class PartieService {
             System.out.println(indice + " - La partie " + partie.getNom() + " est en préparation. Il y a " + partie.getJoueurs().size()
                     + " joueurs pour le moment !");
         }
+    }
+
+    public int getNombreCartesJoueur(Long idJoueur) {
+        return partieDAO.findNombreCartesJoueur(idJoueur);
     }
     
 }

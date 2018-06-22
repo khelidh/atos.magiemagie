@@ -56,8 +56,8 @@ public class JoueurService {
             serviceCarte.deleteCarte(carte);
         joueurDAO.delete(joueur);
     }
+    
     public void supprimerCartes(Joueur joueur, Carte carte1, Carte carte2){
-
         joueur.getCartes().remove(carte1);
         joueur.getCartes().remove(carte2);
         
@@ -109,6 +109,4 @@ public class JoueurService {
         }
         return "Avatar inconnu";
     }
-    
-    
 }

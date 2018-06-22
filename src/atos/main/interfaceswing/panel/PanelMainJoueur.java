@@ -8,28 +8,32 @@ package atos.main.interfaceswing.panel;
 import atos.main.entity.Carte;
 import atos.main.entity.Carte.TypeCarte;
 import atos.main.entity.Joueur;
+import atos.main.entity.Partie;
 import atos.main.interfaceswing.objet.CartePanel;
 import atos.main.service.PartieService;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseListener;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 /**
  *
  * @author mama
  */
-public class PanelMainJoueur extends JPanel{
+public class PanelMainJoueur extends JPanel {
     
     PartieService partieService = new PartieService();
     
+    Long idJoueur;
     JPanel entete, main;
     CartePanel carteAile, carteBave, carteCorne, carteLapis, carteMandragore;
+    JLabel pseudoLabel, tourLabel, nombreJoueursRestantsLabel;
     
     public PanelMainJoueur(){
         super(new BorderLayout());
-        
         
         entete = new JPanel();
         entete.setLayout(new BoxLayout(entete, BoxLayout.X_AXIS));
@@ -48,13 +52,21 @@ public class PanelMainJoueur extends JPanel{
         main.add(carteLapis);
         main.add(carteMandragore);
         
-        this.entete.add(new JLabel("entete"));
+        pseudoLabel = new JLabel("PseudoJoueur", SwingConstants.CENTER);
+        nombreJoueursRestantsLabel = new JLabel("NombreJoueur", SwingConstants.CENTER);
+        tourLabel = new JLabel("joueur");
+        
+        this.entete.add(pseudoLabel);
+        this.entete.add(nombreJoueursRestantsLabel);
+        this.entete.add(tourLabel);
         
         this.add(entete, BorderLayout.NORTH);
         this.add(main, BorderLayout.SOUTH);
     }
     public PanelMainJoueur(Long idJoueur){
         super(new BorderLayout());
+        this.idJoueur = idJoueur;
+        
         this.entete = new JPanel(new BoxLayout(this.entete, BoxLayout.X_AXIS));
         this.main = new JPanel(new BoxLayout(this.main, BoxLayout.X_AXIS));
         
@@ -64,13 +76,14 @@ public class PanelMainJoueur extends JPanel{
         carteLapis= new CartePanel(TypeCarte.LAPIS_LAZULI);
         carteMandragore = new CartePanel(TypeCarte.MANDRAGORE);
         
-        setQuantite(idJoueur);
+        setQuantite(this.idJoueur);
         
         this.main.add(carteAile);
         this.main.add(carteBave);
         this.main.add(carteCorne);
         this.main.add(carteLapis);
         this.main.add(carteMandragore);
+        
         this.add(entete, BorderLayout.NORTH);
         this.add(main, BorderLayout.SOUTH);
     }
@@ -107,6 +120,37 @@ public class PanelMainJoueur extends JPanel{
 
         
     }
+    
+    public void setEntete(Long idJoueur){
+        Joueur joueur = partieService.getJoueur(idJoueur);
+        Partie partie = joueur.getPartie();
+        
+        this.pseudoLabel.setText(" " + joueur.getPseudo());
+        
+        
+        String nombreJoueurs = " " + partieService.getJoueurs(partie.getId()).size();
+        this.nombreJoueursRestantsLabel.setText(nombreJoueurs);
+        
+        
+        String tourJoueur = partieService.getJoueurALaMain(partie.getId()).getPseudo();
+        this.tourLabel.setText(tourJoueur);
+    }
+
+    public void setTourLabel(String nomJoueurQuiALeTour) {
+        this.tourLabel.setText(nomJoueurQuiALeTour);
+    }
+    public void setNombreJoueursRestantsLabel(int nombre) {
+        this.nombreJoueursRestantsLabel.setText("" + nombre);
+    }
+
+    public Long getIdJoueur() {
+        return idJoueur;
+    }
+
+    public void setIdJoueur(Long idJoueur) {
+        this.idJoueur = idJoueur;
+    }
+    
     
     
 }

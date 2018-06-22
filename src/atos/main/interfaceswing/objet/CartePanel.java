@@ -9,6 +9,8 @@ import atos.main.entity.Carte.TypeCarte;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -20,7 +22,7 @@ import javax.swing.SwingConstants;
  *
  * @author mama
  */
-public class CartePanel extends JPanel {
+public class CartePanel extends JPanel{
     
     private JLabel carte;
     private JLabel quantite;
@@ -30,7 +32,6 @@ public class CartePanel extends JPanel {
     
     public CartePanel(TypeCarte type) {
         super(new BorderLayout());
-        
         this.type = type;
         
         String cheminCarteMandragore = "/atos/main/interfaceswing/image/carte_mandragore.png";
@@ -48,12 +49,14 @@ public class CartePanel extends JPanel {
         this.add(this.carte, BorderLayout.CENTER);
         this.add(this.quantite, BorderLayout.SOUTH);
         this.setPreferredSize(new Dimension(150, 250));
+        
+        
     }
     
     public void setQuantite(int quantite){
         this.quantite.setText("" + quantite);
     }
-
+    
     public List<Long> getIdCartes() {
         return idCartes;
     }
@@ -69,7 +72,30 @@ public class CartePanel extends JPanel {
     public void setType(TypeCarte type) {
         this.type = type;
     }
-    
-    
+
+    public JLabel getCarte() {
+        return carte;
+    }
+
+    public void setCarte(JLabel carte) {
+        this.carte = carte;
+    }
+
+    public JLabel getQuantite() {
+        return quantite;
+    }
+
+    public void setQuantite(JLabel quantite) {
+        this.quantite = quantite;
+    }
+
+    public ImageIcon getImgICON() {
+        return imgICON;
+    }
+
+    public void setImgICON(ImageIcon imgICON) {
+        this.imgICON = imgICON;
+    }
+
     
 }
