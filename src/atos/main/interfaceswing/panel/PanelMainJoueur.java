@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package atos.main.interfaceswing.panel;
 
 import atos.main.entity.Carte;
@@ -12,8 +7,6 @@ import atos.main.entity.Partie;
 import atos.main.interfaceswing.objet.CartePanel;
 import atos.main.service.PartieService;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.MouseListener;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;

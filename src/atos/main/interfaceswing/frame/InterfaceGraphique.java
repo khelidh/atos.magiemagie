@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package atos.main.interfaceswing.frame;
 
 import atos.main.entity.Joueur;
@@ -10,8 +5,6 @@ import atos.main.entity.Partie;
 import atos.main.interfaceswing.menu.Menu;
 import atos.main.interfaceswing.panel.PanelAffichagePartie;
 import atos.main.interfaceswing.panel.PanelCreerPartie;
-import atos.main.interfaceswing.panel.PanelJoueur;
-import atos.main.interfaceswing.panel.PanelMainJoueur;
 import atos.main.interfaceswing.panel.PanelTable;
 import atos.main.service.JoueurService;
 import atos.main.service.PartieService;
@@ -20,14 +13,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Insets;
-import java.awt.Panel;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,7 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- *
  * @author mama
  */
 public class InterfaceGraphique extends JFrame {
@@ -50,8 +39,6 @@ public class InterfaceGraphique extends JFrame {
 
     public InterfaceGraphique(String title) throws HeadlessException, IOException {
         super(title);
-        
-        
         //Calcul de la taille effective de l'écran utilisateur
         //Dimension de l'écran
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

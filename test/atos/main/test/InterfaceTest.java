@@ -5,14 +5,9 @@
  */
 package atos.main.test;
 
-import atos.main.interfaceswing.panel.PanelJoueur;
+import atos.main.interfaceswing.panel.PanelMainJoueur;
 import javax.swing.JFrame;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -24,7 +19,7 @@ public class InterfaceTest {
     public void testPanelJoueur(){
         
         JFrame fen = new JFrame();
-        fen.add(new PanelJoueur(1L));
+        fen.add(new PanelMainJoueur(1L));
         fen.setVisible(true);
     }
     

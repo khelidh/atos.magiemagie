@@ -111,8 +111,8 @@ public class PanelTable extends JPanel {
         public void mouseClicked(MouseEvent e) {
             CartePanel carte = (CartePanel) e.getSource();
             TypeCarte type = carte.getType();
-            carte.setBackground(Color.red);
-            setSelection(type);
+            
+            setSelection(carte);
         }
 
         @Override
@@ -132,13 +132,18 @@ public class PanelTable extends JPanel {
         }
     };
     
-    public void setSelection(TypeCarte type) {
+    public void setSelection(CartePanel carte) {
         // UPDATE CARTE DESIGN
+        TypeCarte type = carte.getType();
         
-        if (selection1 == null) 
+        if (selection1 == null){
             selection1 = type;
-        else if (selection1 == type) 
+            carte.setBackground(Color.red);
+        }
+        else if (selection1 == type){
             selection1 = null;
+            carte.setBackground(null);
+        }
          else 
             if (selection2 == type) 
                 selection2 = null;

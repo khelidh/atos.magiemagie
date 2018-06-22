@@ -57,6 +57,14 @@ public class CartePanel extends JPanel{
         this.quantite.setText("" + quantite);
     }
     
+    
+    
+    
+    
+    
+    ///////////
+    // GET & SET -ERS
+    /////////////////////
     public List<Long> getIdCartes() {
         return idCartes;
     }
@@ -96,6 +104,4 @@ public class CartePanel extends JPanel{
     public void setImgICON(ImageIcon imgICON) {
         this.imgICON = imgICON;
     }
-
-    
 }
