@@ -1,18 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package atos.main.interfaceswing.panel;
 
-import atos.main.entity.Carte;
 import atos.main.entity.Carte.TypeCarte;
 import atos.main.interfaceswing.objet.CartePanel;
+import atos.main.service.CarteService;
+import atos.main.service.JoueurService;
 import atos.main.service.PartieService;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -29,6 +23,9 @@ import javax.swing.JPanel;
 public class PanelTable extends JPanel {
     
     PartieService partieService = new PartieService();
+    CarteService carteService = new CarteService();
+    JoueurService joueurService = new JoueurService();
+    
     
     List<PanelBot> listeBots;
     JPanel panelBots;
@@ -113,6 +110,9 @@ public class PanelTable extends JPanel {
             TypeCarte type = carte.getType();
             
             setSelection(carte);
+            System.out.println("SElection 1 : " + selection1);
+            System.out.println("Selection 2 : " + selection2);
+            
         }
 
         @Override
@@ -135,21 +135,32 @@ public class PanelTable extends JPanel {
     public void setSelection(CartePanel carte) {
         // UPDATE CARTE DESIGN
         TypeCarte type = carte.getType();
-        
-        if (selection1 == null){
-            selection1 = type;
-            carte.setBackground(Color.red);
-        }
-        else if (selection1 == type){
-            selection1 = null;
-            carte.setBackground(null);
-        }
-         else 
-            if (selection2 == type) 
+        if (carteService.getNombreCarte(panelJoueur.getIdJoueur(), type) > 0) {
+            if (selection1 == null) {
+                selection1 = type;
+                carte.setBackground(Color.red);
+            } else if (selection1 == type) {
+                selection1 = null;
+                carte.setBackground(null);
+            } else if (selection2 == null) {
+                if (selection1 != type) {
+                    carte.setBackground(Color.yellow);
+                    selection2 = type;
+                }
+            } else if (selection2 == type) {
                 selection2 = null;
-            else 
-                selection2 = type;
-        
+                carte.setBackground(null);
+            }
+        }
     }
     
+    public void lancerSort(Long idJoueur, TypeCarte type1, TypeCarte type2){
+        if (selection1 != null && selection2 != null)
+        {
+            String sort = partieService.determinerSort(selection1, selection2);
+            partieService.supprimerDeuxCartes(idJoueur, selection1, selection2);
+            partieService.lancerSort(idJoueur, sort);
+        }
+    }
+
 }

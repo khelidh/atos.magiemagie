@@ -20,28 +20,21 @@ import javax.persistence.Persistence;
  */
 public class CarteService {
     CarteDAO carteDAO = new CarteDAO();
-    
-    public Carte tirer(){
-        return new Carte();
-    }
+   
     public Carte tirer(Joueur joueur){
         int indiceType = (int) (Math.random()*TypeCarte.values().length);    
         return new Carte(TypeCarte.values()[indiceType], joueur);
     }
-    public void piocher(Joueur joueur){
-        int indiceType = (int) (Math.random()*TypeCarte.values().length);
-        carteDAO.insert(new Carte(TypeCarte.values()[indiceType], joueur));
-    }   
-    public List<Carte> getCartesFromJoueur(Joueur joueur){
-        return carteDAO.findByJoueurID(joueur);
-    }
-
     public void updateCarte(Carte carte) {
         carteDAO.update(carte);
     }
 
-    void deleteCarte(Carte carte) {
+    public void deleteCarte(Carte carte) {
         carteDAO.delete(carte);
+    }
+    
+    public Carte getCarte(Long idJoueur, TypeCarte type){
+        return carteDAO.getCarte(idJoueur, type);
     }
     
     public Long getNombreCarte(Long idJoueur, TypeCarte type){

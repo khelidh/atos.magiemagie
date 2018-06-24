@@ -788,4 +788,23 @@ public class PartieService {
         return partieDAO.findNombreCartesJoueur(idJoueur);
     }
     
+    public void supprimerDeuxCartes(Long idJoueur, TypeCarte selection1, TypeCarte selection2) {
+        Joueur joueur = getJoueur(idJoueur);
+        Carte carte1 = carteDAO.getCarte(idJoueur, selection1);
+        Carte carte2 = carteDAO.getCarte(idJoueur, selection2);
+        
+        System.out.println("supprimerDeuxCartes - CARTE 1 : " + carte1.getType());
+        System.out.println("supprimerDeuxCartes - CARTE 2 : " + carte2.getType());
+        
+        joueur.getCartes().remove(carte1);
+        joueur.getCartes().remove(carte2);
+        
+        carte1.setJoueur(null);
+        carte2.setJoueur(null);
+      
+        serviceCarte.deleteCarte(carte1);
+        serviceCarte.deleteCarte(carte2);
+        serviceJoueur.updateJoueur(joueur);
+    }
+    
 }

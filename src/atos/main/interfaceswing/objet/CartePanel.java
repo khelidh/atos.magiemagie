@@ -27,7 +27,7 @@ public class CartePanel extends JPanel{
     private JLabel carte;
     private JLabel quantite;
     private ImageIcon imgICON;
-    private List<Long> idCartes = new ArrayList<>();
+    //private List<Long> idCartes = new ArrayList<>();
     private TypeCarte type;
     
     public CartePanel(TypeCarte type) {
@@ -65,14 +65,6 @@ public class CartePanel extends JPanel{
     ///////////
     // GET & SET -ERS
     /////////////////////
-    public List<Long> getIdCartes() {
-        return idCartes;
-    }
-
-    public void setIdCartes(List<Long> idCartes) {
-        this.idCartes = idCartes;
-    }
-
     public TypeCarte getType() {
         return type;
     }

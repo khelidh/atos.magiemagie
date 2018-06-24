@@ -58,6 +58,9 @@ public class JoueurService {
     }
     
     public void supprimerCartes(Joueur joueur, Carte carte1, Carte carte2){
+        
+        //Joueur joueur = carte1.getJoueur();
+        
         joueur.getCartes().remove(carte1);
         joueur.getCartes().remove(carte2);
         

@@ -78,6 +78,19 @@ public class CarteDAO {
         }
         return res;
     }
+    
+    public Carte getCarte(Long idJoueur, TypeCarte type){
+        String requete = "SELECT c "
+                + "     FROM Carte c"
+                + "     JOIN c.joueur j"
+                + "     WHERE j.id = :idJoueur"
+                + "     AND c.type = :typeCarte";
+        
+        Query query = makeEM().createQuery(requete);
+        query.setMaxResults(1);
+        
+        return (Carte) query.getSingleResult();
+    }
 }
 
 
