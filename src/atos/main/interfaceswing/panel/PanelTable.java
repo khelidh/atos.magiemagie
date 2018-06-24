@@ -107,11 +107,10 @@ public class PanelTable extends JPanel {
         @Override
         public void mouseClicked(MouseEvent e) {
             CartePanel carte = (CartePanel) e.getSource();
-            TypeCarte type = carte.getType();
             
             setSelection(carte);
-            System.out.println("SElection 1 : " + selection1);
-            System.out.println("Selection 2 : " + selection2);
+            System.out.println("Sélection 1 : " + selection1);
+            System.out.println("Sélection 2 : " + selection2);
             
         }
 
