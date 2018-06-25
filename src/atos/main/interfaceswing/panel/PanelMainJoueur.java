@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 /**
- *
  * @author mama
  */
 public class PanelMainJoueur extends JPanel {
