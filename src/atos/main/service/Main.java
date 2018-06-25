@@ -7,6 +7,7 @@ package atos.main.service;
 
 import atos.main.dao.PartieDAO;
 import atos.main.entity.Joueur;
+import atos.main.entity.Partie;
 import atos.main.interfaceswing.frame.InterfaceGraphique;
 import atos.main.service.CarteService;
 import atos.main.service.JoueurService;
@@ -25,14 +26,20 @@ public class Main {
         PartieService servicePartie = new PartieService();
         JoueurService serviceJoueur = new JoueurService();
         CarteService serviceCarte = new CarteService();
+
         
-        //Long idPartie = 1L;
-       
-//        servicePartie.creer("Miyamoto", "M");
-//        serviceJoueur.rejoindrePartie("Kobi", "K", idPartie);
-//        serviceJoueur.rejoindrePartie("Faramir", "F", idPartie);
-//        serviceJoueur.rejoindrePartie("Hobbit", "H", idPartie);
+
+//        Partie partie = servicePartie.creer("Partie TESQT22", "Miyamotooo", "M");
+//        Long idPartie = partie.getId();
+//        
+//        servicePartie.rejoindrePartie("Kobi", "K", idPartie);
+//        servicePartie.rejoindrePartie("Faramir", "F", idPartie);
+//        servicePartie.rejoindrePartie("Hobbit", "H", idPartie);
+//        servicePartie.demarrer(idPartie);
+//        servicePartie.distribuer(idPartie);
+//        servicePartie.volerCarteAleatoireFromJoueur(1L, 2L);
           new InterfaceGraphique("- Magie Magie -");
-          //servicePartie.application();
+
+        //servicePartie.application();
     }
 }

@@ -1,23 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package atos.main.service;
 
-import atos.main.dao.CarteDAO;
 import atos.main.dao.JoueurDAO;
 import atos.main.dao.PartieDAO;
 import atos.main.entity.Carte;
 import atos.main.entity.Joueur;
-import atos.main.entity.Joueur.EtatJoueur;
-import atos.main.entity.Partie;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
- *
  * @author mama
  */
 public class JoueurService {  
@@ -26,7 +15,6 @@ public class JoueurService {
     PartieDAO partieDAO = new PartieDAO();
        
     public String mainToString(Joueur joueur){
-        
         int indice = 1;
         String chaine = "Main de " + joueur.getAvatar() + "  :";
         for (Carte carte : joueur.getCartes()){
@@ -35,6 +23,7 @@ public class JoueurService {
         }
         return chaine;
     }
+    
     public void afficher(Joueur joueur){
         String chaine = ""
                 + "Avatar : " + joueur.getAvatar()
@@ -43,18 +32,13 @@ public class JoueurService {
         
         System.out.println(chaine);
     }
+    
     public void insertJoueur(Joueur joueur){
         joueurDAO.insert(joueur);
     }
+    
     public void updateJoueur(Joueur joueur){
         joueurDAO.update(joueur);
-    }
-    public void deleteJoueur(Joueur joueur) {
-        //joueur.getPartie().getJoueurs().remove(joueur);
-        //partieDAO.update(joueur.getPartie());
-        for (Carte carte : joueur.getCartes())
-            serviceCarte.deleteCarte(carte);
-        joueurDAO.delete(joueur);
     }
     
     public void supprimerCartes(Joueur joueur, Carte carte1, Carte carte2){
@@ -85,6 +69,7 @@ public class JoueurService {
         return txt;
         
     }
+    
     public String selectionAvatar(){ 
         int avatar;
         Scanner scanner = new Scanner(System.in);

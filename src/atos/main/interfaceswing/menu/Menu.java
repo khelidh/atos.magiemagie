@@ -5,11 +5,9 @@
  */
 package atos.main.interfaceswing.menu;
 
-import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
 
 /**
  *
@@ -18,7 +16,7 @@ import javax.swing.KeyStroke;
 public class Menu extends JMenuBar {
 
     //public JMenu menuJouer, menuProfil, menuOptions, menuQuitter;
-    private JMenuItem itemCreationPartie, itemRejoindrePartie, itemRelancerApplication, itemQuitterApplication;
+    private JMenuItem itemCreationPartie, itemRejoindrePartie, itemRelancerApplication, itemQuitterApplication, itemDemarrerApplication;
     
     public Menu() {
         JMenu menuJouer, menuProfil, menuOptions, menuQuitter;
@@ -31,8 +29,8 @@ public class Menu extends JMenuBar {
         itemCreationPartie = new JMenuItem(txt_itemJouer1);
         String txt_itemJouer2 = "Rejoindre une partie";
         itemRejoindrePartie = new JMenuItem(txt_itemJouer2);
-        String txt_itemJouer3 = "Charger une partie";
-        JMenuItem itemJouer3 = new JMenuItem(txt_itemJouer3);
+        String txt_itemJouer3 = "Démarrer une partie";
+        itemDemarrerApplication = new JMenuItem(txt_itemJouer3);
         
         
         String txt_itemProfil1 = "Voir son profil";
@@ -50,7 +48,7 @@ public class Menu extends JMenuBar {
         
         menuJouer.add(itemCreationPartie);
         menuJouer.add(itemRejoindrePartie);
-        menuJouer.add(itemJouer3);
+        menuJouer.add(itemDemarrerApplication);
         
         menuProfil.add(itemProfil1);
         menuProfil.add(itemProfil2);
@@ -96,6 +94,8 @@ public class Menu extends JMenuBar {
     public void setItemQuitterApplication(JMenuItem itemQuitterApplication) {
         this.itemQuitterApplication = itemQuitterApplication;
     }
+    
+    
 
     
 }
