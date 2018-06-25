@@ -3,14 +3,17 @@ package atos.main.interfaceswing.frame;
 import atos.main.entity.Joueur;
 import atos.main.entity.Partie;
 import atos.main.interfaceswing.menu.Menu;
-import atos.main.interfaceswing.panel.PanelAffichagePartie;
+import atos.main.interfaceswing.panel.PanelAffichageRejoindrePartie;
 import atos.main.interfaceswing.panel.PanelCreerPartie;
 import atos.main.interfaceswing.panel.PanelTable;
 import atos.main.service.JoueurService;
 import atos.main.service.PartieService;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.Toolkit;
@@ -25,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 /**
  * @author mama
@@ -49,7 +53,7 @@ public class InterfaceGraphique extends JFrame {
         int width = screenSize.width;
         
         // Initialisation de la fenêtre
-        setSize(800, 500);
+        setSize(800, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         
@@ -60,12 +64,15 @@ public class InterfaceGraphique extends JFrame {
         initialisationMenu();
         initEntete();
         initContainer();
-        
+        container.setBackground(new Color(237, 50 , 50));
+        entete.setBackground(new Color(255, 255 , 255));
         // Personnalisation
         this.add(entete, BorderLayout.NORTH);
         this.add(container, BorderLayout.CENTER);
         this.setJMenuBar(menu);
         
+        
+
         setVisible(true);
     }
     
@@ -90,7 +97,7 @@ public class InterfaceGraphique extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             container.removeAll();
-            container.add(new PanelTable(3));
+            container.add(new PanelTable(1L));
             container.revalidate();
             container.repaint();
         }
@@ -111,17 +118,17 @@ public class InterfaceGraphique extends JFrame {
     }
     private void initEntete() {
         JLabel labelEntete = new JLabel("*-_Magie Magie _-*");
-        Font font = new Font("Century", Font.BOLD, 30);
+        Font font = new Font("Century", Font.BOLD, 36);
         labelEntete.setFont(font);
         entete.add(labelEntete);
     }
     private void initContainer() {
-        String chaine = "Bien à vous sorcières et sorciers ! Vous entrez dans"
+        String chaine = "<html>Bien à vous sorcières et sorciers !<br>Vous entrez dans"
                 + "le monde de Magie Magie ! Où vos grimoires, votre aptitude aux sortilèges et votre passion pour la magie"
-                + " seront mis à rude épreuve ! Préparez vos baguette, avec le regard tranchant, et devenez MAGIE !";
+                + " seront mis à rude épreuve !<br><br><b>Préparez vos baguette, avec le regard tranchant, et devenez MAGIE !</b></html>";
         JLabel label = new JLabel(chaine);
-        label.setPreferredSize(new Dimension(getWidth()/2, getHeight()/2));
-        Font font = new Font("Century", Font.CENTER_BASELINE, 18);
+        label.setPreferredSize(new Dimension((int) (getWidth()*0.8),(int) (getHeight()*0.8)));
+        Font font = new Font("Century", Font.CENTER_BASELINE, 25);
         label.setFont(font);
         this.container.add(label);
         
@@ -216,7 +223,6 @@ public class InterfaceGraphique extends JFrame {
         revalidate();
         repaint();
     }
-    
     public void affichageParties(){
         this.container.removeAll();
         List<Partie> listeParties = partieService.getPartiesEnPrepapration();
@@ -225,10 +231,10 @@ public class InterfaceGraphique extends JFrame {
         JPanel panelAffichage = new JPanel();
         panelAffichage.setLayout(new BoxLayout(panelAffichage, BoxLayout.Y_AXIS));
         
-        panelAffichage.add(new PanelAffichagePartie());
+        panelAffichage.add(new PanelAffichageRejoindrePartie());
         
         for (Partie partie : listeParties)
-            panelAffichage.add(new PanelAffichagePartie(partie));
+            panelAffichage.add(new PanelAffichageRejoindrePartie(partie));
         
         this.container.add(panelAffichage);
         revalidate();

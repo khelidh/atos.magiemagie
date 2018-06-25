@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package atos.main.dao;
 
 import atos.main.entity.Joueur;
@@ -15,7 +10,6 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 /**
- *
  * @author mama
  */
 public class PartieDAO {
@@ -90,7 +84,6 @@ public class PartieDAO {
     }  
     
     public Long findNombreJoueurEnAttente(Long idPartie){
-        
         String requete = "SELECT count(j) FROM Joueur j"
                 + "     WHERE j.etat = :etat"
                 + "     AND j.partie.id = :id";
@@ -239,5 +232,4 @@ public class PartieDAO {
         
         return (int) query.getSingleResult();
     }
-
 }

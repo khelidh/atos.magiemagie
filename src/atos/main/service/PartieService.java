@@ -14,7 +14,6 @@ import atos.main.entity.Joueur;
 import atos.main.entity.Joueur.EtatJoueur;
 import atos.main.entity.Partie;
 import atos.main.entity.Partie.EtatPartie;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -37,6 +36,7 @@ public class PartieService {
     public static final int POSITION_DE_DEPART = 0;
 
     public static final int NOMBRE_MINIMAL_JOUEURS_PAR_PARTIE = 2;
+    private static final int NOMBRE_CARTES_VOLEES_HYPNOSE = 3;
 
 //////////////////////
     //  DAO & Services utilisés 
@@ -92,7 +92,7 @@ public class PartieService {
     }
 
     public void rejoindrePartie(String pseudo, String avatar, Long idPartie) {
-
+        // si le pseudo n'existe pas, renvoie un objet Joueur avec le pseudo donné
         Joueur joueur = joueurDAO.findJoueurByPseudo(pseudo);
 
         // On choisit un avatar lorque l'on rejoint la partie
@@ -106,26 +106,17 @@ public class PartieService {
         Partie partie = partieDAO.findById(idPartie);
 
         joueur.setPartie(partie);
-        partie.getJoueurs().add(joueur);
+        
+        // Pas besoin de faire ça -> même résultat car on ne l'utilise plus après : [ la liste
+        // n'est pas update]
+        //partie.getJoueurs().add(joueur);
 
         if (joueur.getId() == null) {
             joueurDAO.insert(joueur);
         } else {
             joueurDAO.update(joueur);
         }
-        // besoin d'update la partie pour retouver les joueurs avec le Partie.getJoueurs()
-        //updatePartie(partie);
-        System.out.println("\nAvant update(Partie)");
-        System.out.println("AVEC LA PARTIE DEJA EN PLACE // Nombre de joueurs dans la partie : " + partie.getJoueurs().size());
-        System.out.println("FIND JOUEURS AVEC idPartie DANS LA BDD // Nombre de joueurs dans la partie : " + partieDAO.findNombreJoueurEnAttente(idPartie));
-        System.out.println("FIND PARTIE DANS BDD// Nombre de joueurs dans la partie : " + partieDAO.findById(idPartie).getJoueurs().size());
-        System.out.println("");
-        updatePartie(partie);
-        System.out.println("Apres update(Partie)");
-        System.out.println("AVEC LA PARTIE DEJA EN PLACE // Nombre de joueurs dans la partie : " + partie.getJoueurs().size());
-        System.out.println("FIND JOUEURS AVEC idPartie DANS LA BDD // Nombre de joueurs dans la partie : " + partieDAO.findNombreJoueurEnAttente(idPartie));
-        System.out.println("FIND PARTIE DANS BDD// Nombre de joueurs dans la partie : " + partieDAO.findById(idPartie).getJoueurs().size());
-        System.out.println("");
+        
     }
 
     public void terminerPartie(Long idPartie) {
@@ -168,7 +159,6 @@ public class PartieService {
     public void eliminerJoueur(Long idJoueur) {
         Joueur joueur = getJoueur(idJoueur);
         joueur.setEtat(EtatJoueur.ELIMINE);
-        //partie.getJoueurs().remove(joueur);
 
         System.out.println("Le joueur " + joueur.getPseudo() + " est éliminé ! Dommage ! ");
         System.out.println("Il reste " + partieDAO.findNombreJoueurEnLice(idJoueur) + " dans la partie !");
@@ -179,6 +169,7 @@ public class PartieService {
                 serviceCarte.deleteCarte(carte);
             }
         }
+        
         serviceJoueur.updateJoueur(joueur);
     }
 
@@ -191,8 +182,9 @@ public class PartieService {
                 //carteDAO.insert(new Carte(joueur));    
                 Carte carte = carteService.tirer(joueur);
                 carteDAO.insert(carte);
-                joueur.getCartes().add(carte);
-                serviceJoueur.updateJoueur(joueur);
+                // Pas besoin d'update liste et bdd joueur car c'est déjà fait avec la carte 
+                //joueur.getCartes().add(carte);
+                //serviceJoueur.updateJoueur(joueur);
             }
         }
     }
@@ -201,22 +193,20 @@ public class PartieService {
         Joueur cible = getJoueur(idCible);
         Joueur joueur = getJoueur(idJoueur);
 
-        List<Carte> cartes = cible.getCartes();
-        int nombreCartes = cartes.size();
+        List<Carte> cartesCible = cible.getCartes();
+        int nombreCartes = cartesCible.size();
         int indiceCarteVolee = (int) (Math.random() * nombreCartes);
+        
+//        System.out.println("- 0 -");
+//        System.out.println("Joueur size cartes : " + joueur.getCartes().size());
+//        System.out.println("Cible size cartes : " + cible.getCartes().size());
+//        System.out.println("Joueur daoGet cartes : " + getJoueur(idJoueur).getCartes().size());
+//        System.out.println("Cible daoGet cartes : " + getJoueur(idCible).getCartes().size());
 
-        Carte carteVolee = cartes.get(indiceCarteVolee);
+        Carte carteVolee = cartesCible.get(indiceCarteVolee);
         carteVolee.setJoueur(joueur);
-
-        joueur.getCartes().add(carteVolee);
-        cartes.remove(carteVolee);
-
-        System.out.println("Le joueur " + joueur.getPseudo() + " a volé une carte " + carteVolee.getType()
-                + " au joueur " + cible.getPseudo() + " !");
-
         serviceCarte.updateCarte(carteVolee);
-        serviceJoueur.updateJoueur(joueur);
-        serviceJoueur.updateJoueur(cible);
+        
     }
 
     ///////////////////////
@@ -236,8 +226,11 @@ public class PartieService {
     public void piocherCarte(Long idJoueur) {
         Joueur joueur = getJoueur(idJoueur);
         Carte carte = serviceCarte.tirer(joueur);
+        
+        // Insert dans la base de la carte
         carteDAO.insert(carte);
-        joueur.getCartes().add(carte);
+        
+        // Update état du joueur
         joueur.setEtat(EtatJoueur.PAS_LA_MAIN);
         serviceJoueur.updateJoueur(joueur);
     }
@@ -256,6 +249,7 @@ public class PartieService {
         }
     }
 
+    // jouerTour avec sout pour version console
     public void jouerTour(Long idJoueur) {
         System.out.println("");
         System.out.println("A vous de jouer " + getJoueur(idJoueur).getPseudo());
@@ -268,7 +262,7 @@ public class PartieService {
             isJoueurStillAlive(idJoueur);
             jouer(getNextDealer(idJoueur).getId());
         } else if (action == 2) {
-            System.out.println("Vous avez choisi de passer votre et donc de piocher une carte !");
+            System.out.println("Vous avez choisi de passer votre tour et donc de piocher une carte !");
             piocherCarte(idJoueur);
             // récupère prochain joueur en état de jouer (en faisant les mofifications 
             //nécessaires pour les joueurs en sommeil) -> puis le fait jouer
@@ -282,6 +276,7 @@ public class PartieService {
         }
     }
 
+    // JouerSort avec sout
     public void jouerSort(Long idJoueur) {
         Joueur joueur = getJoueur(idJoueur);
 
@@ -314,40 +309,50 @@ public class PartieService {
             jouerSort(idJoueur);
         }
     }
+    
+    //jouerSort modifié
+    public void jouerSortPANEL(Long idJoueur, TypeCarte type1, TypeCarte type2) {
+        String sort = determinerSort(type1, type2);
+        supprimerDeuxCartes(idJoueur, type1, type2);
+        lancerSort(idJoueur, sort);
+    }
 
     public String determinerSort(TypeCarte type1, TypeCarte type2) {
         String sort = SORT_FAILED;
 
-        if (type1.equals(TypeCarte.AILE_DE_CHAUVE_SOURIS)) {
-            if (type2.equals(TypeCarte.MANDRAGORE)) {
-                sort = SORT_SOMMEIL_PROFOND;
-            } else if (type2.equals(TypeCarte.LAPIS_LAZULI)) {
-                sort = SORT_DIVINATION;
-            }
-        } else if ((type1.equals(TypeCarte.MANDRAGORE))) {
-            if (type2.equals(TypeCarte.AILE_DE_CHAUVE_SOURIS)) {
-                sort = SORT_SOMMEIL_PROFOND;
-            } else if (type2.equals(TypeCarte.CORNE_DE_LICORNE)) {
-                sort = SORT_FILTRE_AMOUR;
-            }
-        } else if ((type1.equals(TypeCarte.CORNE_DE_LICORNE))) {
-            if (type2.equals(TypeCarte.MANDRAGORE)) {
-                sort = SORT_FILTRE_AMOUR;
-            } else if (type2.equals(TypeCarte.BAVE_DE_CRAPAUD)) {
-                sort = SORT_INVISIBILITE;
-            }
-        } else if ((type1.equals(TypeCarte.BAVE_DE_CRAPAUD))) {
-            if (type2.equals(TypeCarte.CORNE_DE_LICORNE)) {
-                sort = SORT_INVISIBILITE;
-            } else if (type2.equals(TypeCarte.LAPIS_LAZULI)) {
-                sort = SORT_HYPSNOSE;
-            }
-        } else if ((type1.equals(TypeCarte.LAPIS_LAZULI))) {
-            if (type2.equals(TypeCarte.BAVE_DE_CRAPAUD)) {
-                sort = SORT_HYPSNOSE;
-            } else if (type2.equals(TypeCarte.AILE_DE_CHAUVE_SOURIS)) {
-                sort = SORT_DIVINATION;
-            }
+        switch (type1) {
+            case AILE_DE_CHAUVE_SOURIS:
+                if (type2.equals(TypeCarte.MANDRAGORE)) {
+                    sort = SORT_SOMMEIL_PROFOND;
+                } else if (type2.equals(TypeCarte.LAPIS_LAZULI)) {
+                    sort = SORT_DIVINATION;
+                }   break;
+            case MANDRAGORE:
+                if (type2.equals(TypeCarte.AILE_DE_CHAUVE_SOURIS)) {
+                    sort = SORT_SOMMEIL_PROFOND;
+                } else if (type2.equals(TypeCarte.CORNE_DE_LICORNE)) {
+                    sort = SORT_FILTRE_AMOUR;
+                }   break;
+            case CORNE_DE_LICORNE:
+                if (type2.equals(TypeCarte.MANDRAGORE)) {
+                    sort = SORT_FILTRE_AMOUR;
+                } else if (type2.equals(TypeCarte.BAVE_DE_CRAPAUD)) {
+                    sort = SORT_INVISIBILITE;
+                }   break;
+            case BAVE_DE_CRAPAUD:
+                if (type2.equals(TypeCarte.CORNE_DE_LICORNE)) {
+                    sort = SORT_INVISIBILITE;
+                } else if (type2.equals(TypeCarte.LAPIS_LAZULI)) {
+                    sort = SORT_HYPSNOSE;
+                }   break;
+            case LAPIS_LAZULI:
+                if (type2.equals(TypeCarte.BAVE_DE_CRAPAUD)) {
+                    sort = SORT_HYPSNOSE;
+                } else if (type2.equals(TypeCarte.AILE_DE_CHAUVE_SOURIS)) {
+                    sort = SORT_DIVINATION;
+                }   break;
+            default:
+                break;
         }
         return sort;
     }
@@ -397,11 +402,9 @@ public class PartieService {
 
     public void lancerSortInvisibilite(Long idJoueur) {
         Joueur joueur = getJoueur(idJoueur);
-        System.out.println("Sort d'invisibilité lancé par " + joueur.getPseudo());
-
         List<Joueur> listeJoueurs = joueurDAO.findAllFromPartieExecptOne(joueur);
 
-        for (Joueur cible : listeJoueurs) {
+        for(Joueur cible : listeJoueurs) {
             volerCarteAleatoireFromJoueur(idJoueur, cible.getId());
         }
     }
@@ -421,20 +424,16 @@ public class PartieService {
     }
 
     public void lancerSortHypnose(Long idJoueur, Long idCible) {
-
-        final int NOMBRE_CARTES_VOLEES = 3;
         boolean cibleEliminee = false;
 
         Joueur joueur = getJoueur(idJoueur);
         Joueur cible = getJoueur(idCible);
-        System.out.println(joueur.getPseudo() + " vient d'hypnotiser " + cible.getPseudo()
-                + " pour lui échanger 1 de ses cartes contre 3 ! Quel action de la sorcière française ! Chapeau bas !");
 
         long indiceCarteJoueur = (long) selectionCarte(idJoueur);
         Carte carteJoueur = joueur.getCartes().get((int) indiceCarteJoueur);
         joueur.getCartes().remove(carteJoueur);
 
-        for (int i = 0; i < NOMBRE_CARTES_VOLEES; i++) {
+        for (int i = 0; i < NOMBRE_CARTES_VOLEES_HYPNOSE; i++) {
             int nombreCarteCible = cible.getCartes().size();
 
             if (nombreCarteCible > 0) {
@@ -469,6 +468,46 @@ public class PartieService {
         serviceJoueur.updateJoueur(joueur);
     }
 
+    // SANS SOUT et selectionCible // Interface
+    public void lancerSortHypnosePANEL(Long idJoueur, TypeCarte joueurSelectionCarteType, Long idCible) {
+        boolean cibleEliminee = false;
+
+        Joueur joueur = getJoueur(idJoueur);
+        Joueur cible = getJoueur(idCible);
+
+        Carte carteJoueur = carteDAO.getCarte(idJoueur, joueurSelectionCarteType);
+        
+        int nombreCarteCible = cible.getCartes().size();
+        
+        for (int i = 0; i < NOMBRE_CARTES_VOLEES_HYPNOSE; i++) {
+            
+
+            if (nombreCarteCible > 0) {
+                int indiceCarte = (int) (Math.random() * nombreCarteCible);
+
+                Carte carteVolee = cible.getCartes().remove(indiceCarte);
+                carteVolee.setJoueur(joueur);
+                nombreCarteCible--;
+                serviceCarte.updateCarte(carteVolee);
+            } else {
+                cibleEliminee = true;
+                break;
+            }
+        }
+
+        if (cibleEliminee) {
+            carteJoueur.setJoueur(null);
+            serviceCarte.deleteCarte(carteJoueur);
+            eliminerJoueur(idCible);
+        } else {
+            carteJoueur.setJoueur(cible);
+            serviceCarte.updateCarte(carteJoueur);
+        }
+
+//        serviceJoueur.updateJoueur(cible);
+//        serviceJoueur.updateJoueur(joueur);
+    }
+    
     public void lancerSortFiltreAmour(Long idJoueur, Long idCible) {
 
         Joueur joueur = getJoueur(idJoueur);
@@ -500,6 +539,28 @@ public class PartieService {
             serviceJoueur.updateJoueur(cible);
         }
     }
+    
+     public void lancerSortFiltreAmourPANEL(Long idJoueur, Long idCible) {
+
+        Joueur joueur = getJoueur(idJoueur);
+        Joueur cible = getJoueur(idCible);
+
+        int moitieCarteCible = (int) (cible.getCartes().size() / 2);
+
+        if (moitieCarteCible == 0) {
+            eliminerJoueur(cible.getId());
+        } else {
+            for (int i = 0; i < moitieCarteCible; i++) {
+                int indice = (int) (Math.random() * cible.getCartes().size());
+
+                Carte carteVolee = cible.getCartes().remove(indice);
+                carteVolee.setJoueur(joueur);
+                serviceCarte.updateCarte(carteVolee);
+            }
+//            serviceJoueur.updateJoueur(joueur);
+//            serviceJoueur.updateJoueur(cible);
+        }
+    }
 
     ///////////////////////
     //  CHECKs
@@ -508,13 +569,13 @@ public class PartieService {
         return partieDAO.findNombreJoueurEnLice(idPartie) == 1;
     }
 
+    // Peut-etre faire une requete directe au lieu de prendre l'objet et faire une opération dessus
     public void isJoueurStillAlive(Long idJoueur) {
         Joueur joueur = getJoueur(idJoueur);
-        if (joueur.getCartes().size() == 0) {
+        if (joueur.getCartes().isEmpty()) {
             eliminerJoueur(idJoueur);
         }
     }
-
     ///////////////////////
     //  SELECTIONS
     /////////////////////
@@ -625,7 +686,7 @@ public class PartieService {
     ///////////////////////
     //  GET
     /////////////////////
-    private Partie getPartie(Long idPartie) {
+    public Partie getPartie(Long idPartie) {
         return partieDAO.findById(idPartie);
     }
 
@@ -790,21 +851,20 @@ public class PartieService {
     
     public void supprimerDeuxCartes(Long idJoueur, TypeCarte selection1, TypeCarte selection2) {
         Joueur joueur = getJoueur(idJoueur);
+        
         Carte carte1 = carteDAO.getCarte(idJoueur, selection1);
         Carte carte2 = carteDAO.getCarte(idJoueur, selection2);
         
         System.out.println("supprimerDeuxCartes - CARTE 1 : " + carte1.getType());
         System.out.println("supprimerDeuxCartes - CARTE 2 : " + carte2.getType());
-        
-        joueur.getCartes().remove(carte1);
-        joueur.getCartes().remove(carte2);
-        
+
         carte1.setJoueur(null);
         carte2.setJoueur(null);
       
         serviceCarte.deleteCarte(carte1);
         serviceCarte.deleteCarte(carte2);
-        serviceJoueur.updateJoueur(joueur);
+        
+        //serviceJoueur.updateJoueur(joueur);
     }
     
 }

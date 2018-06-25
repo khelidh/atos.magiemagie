@@ -1,21 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package atos.main.service;
 
 import atos.main.dao.CarteDAO;
 import atos.main.entity.Carte;
 import atos.main.entity.Carte.TypeCarte;
 import atos.main.entity.Joueur;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-
 /**
- *
  * @author mama
  */
 public class CarteService {
