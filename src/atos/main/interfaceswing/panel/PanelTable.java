@@ -32,9 +32,11 @@ public class PanelTable extends JPanel {
     // Variables d'instance
     List<PanelBot> listeBots;
     JPanel panelBots;
-    PanelMainJoueur panelJoueur;
+    PanelJoueurPrincipal panelJoueur;
     JPanel panelBoutons;
     TypeCarte selection1 = null, selection2 = null;
+    Long idPartie;
+    
     
     ////////////////
     //      CONSTRUCTEUR(s)
@@ -45,11 +47,13 @@ public class PanelTable extends JPanel {
         Joueur joueurPrincipal = partieService.getJoueur(idJoueur);
         Partie partie = joueurPrincipal.getPartie();
         
+        this.idPartie = partie.getId();
+        
         panelBots = new JPanel();
         panelBots.setLayout(new BoxLayout(panelBots, BoxLayout.X_AXIS));
         
         //test avec grid : effet " table poker"
-        panelBots.setLayout(new GridLayout(3, 3, 2, 2));
+        //panelBots.setLayout(new GridLayout(3, 3, 2, 2));
         
         
     // Initialisation des bots et du panel BOT
@@ -70,12 +74,17 @@ public class PanelTable extends JPanel {
         panelBoutons.add(boutonPasserTour);
                 
     // Initialisation du panel Joueur principal
-        panelJoueur = new PanelMainJoueur(2L);
+        panelJoueur = new PanelJoueurPrincipal(2L);
         panelJoueur.carteAile.addMouseListener(carteSelectionListener);
         panelJoueur.carteBave.addMouseListener(carteSelectionListener);
         panelJoueur.carteCorne.addMouseListener(carteSelectionListener);
         panelJoueur.carteLapis.addMouseListener(carteSelectionListener);
         panelJoueur.carteMandragore.addMouseListener(carteSelectionListener);
+        
+        
+        
+        
+        
                 
         
     // Ajout à this (PanelTable)
@@ -151,4 +160,33 @@ public class PanelTable extends JPanel {
             }
         }
     }
+    ////////////////////
+    //                  Get     
+    //////////////////////////////////////////////////////////////////
+
+    public TypeCarte getSelection1() {
+        return selection1;
+    }
+
+    public void setSelection1(TypeCarte selection1) {
+        this.selection1 = selection1;
+    }
+
+    public TypeCarte getSelection2() {
+        return selection2;
+    }
+
+    public void setSelection2(TypeCarte selection2) {
+        this.selection2 = selection2;
+    }
+
+    public Long getIdPartie() {
+        return idPartie;
+    }
+
+    public void setIdPartie(Long idPartie) {
+        this.idPartie = idPartie;
+    }
+     
+    
 }

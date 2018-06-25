@@ -199,10 +199,21 @@ public class PartieDAO {
                 + "     WHERE p.id = :idPartie"
                 + "     ORDER BY j.position ASC";
         
-        Query query = makeEM().createQuery(requete);
+        String requete2 = ""
+                + "     SELECT j "
+                + "     FROM Joueur j"
+                + "     JOIN j.partie p"
+                + "     WHERE p.id = :idPartie"
+                + "     AND j.position = "
+                + "         (SELECT MIN(j.position)"
+                + "             FROM Joueur j"
+                + "             JOIN j.partie p"
+                + "             WHERE p.id = :idPartie)";
+        
+        Query query = makeEM().createQuery(requete2);
         query.setParameter("idPartie", idPartie);
         
-        query.setMaxResults(1);
+        //query.setMaxResults(1);
         
         return (Joueur) query.getSingleResult();
     }
@@ -217,13 +228,11 @@ public class PartieDAO {
         query.setParameter("idPartie", idPartie);
         query.setParameter("etat", EtatJoueur.A_LA_MAIN);
         
-        query.setMaxResults(1);
-        
         return (Joueur) query.getSingleResult();
     }
 
     public int findNombreCartesJoueur(Long idJoueur) {
-         String requete = "SELECT count(c) FROM Carte c"
+        String requete = "SELECT count(c) FROM Carte c"
                  + "        JOIN c.joueur j"
                  + "        WHERE j.id = :idJoueur";
         

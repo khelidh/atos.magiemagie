@@ -3,6 +3,7 @@ package atos.main.interfaceswing.frame;
 import atos.main.entity.Joueur;
 import atos.main.entity.Partie;
 import atos.main.interfaceswing.menu.Menu;
+import atos.main.interfaceswing.panel.PanelAffichageAllRejoindre;
 import atos.main.interfaceswing.panel.PanelAffichageRejoindrePartie;
 import atos.main.interfaceswing.panel.PanelCreerPartie;
 import atos.main.interfaceswing.panel.PanelTable;
@@ -28,7 +29,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 
 /**
  * @author mama
@@ -39,6 +39,7 @@ public class InterfaceGraphique extends JFrame {
     JoueurService joueurService = new JoueurService();
     
     JPanel container, entete;
+    JPanel tableDeJeu, affichageRejoindre, affichageCreer;
     Menu menu;
 
     public InterfaceGraphique(String title) throws HeadlessException, IOException {
@@ -60,10 +61,15 @@ public class InterfaceGraphique extends JFrame {
         entete = new JPanel();
         container = new JPanel();
         menu = new Menu();
+        
+        affichageCreer = new PanelCreerPartie();
+        affichageRejoindre = new PanelAffichageAllRejoindre();
+        
 
         initialisationMenu();
         initEntete();
         initContainer();
+        
         container.setBackground(new Color(237, 50 , 50));
         entete.setBackground(new Color(255, 255 , 255));
         // Personnalisation
@@ -71,25 +77,31 @@ public class InterfaceGraphique extends JFrame {
         this.add(container, BorderLayout.CENTER);
         this.setJMenuBar(menu);
         
-        
-
         setVisible(true);
     }
     
     ActionListener boutonCreationPartieListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            container.removeAll();
-            container.add(new PanelCreerPartie());
-            container.revalidate();
-            container.repaint();
+            
+            if (e.getSource() != affichageCreer) {
+                container.removeAll();
+                ((PanelCreerPartie) affichageCreer).resetAll();
+                container.add(affichageCreer);
+                container.revalidate();
+                container.repaint();
+            }
         }
     };
     
     ActionListener boutonRejoindrePartieListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            affichageParties();
+            container.removeAll();
+            ((PanelAffichageAllRejoindre) affichageRejoindre).maj();
+            container.add(affichageRejoindre);
+            container.revalidate();
+            container.repaint();
         }
     };
     
@@ -124,7 +136,7 @@ public class InterfaceGraphique extends JFrame {
     }
     private void initContainer() {
         String chaine = "<html>Bien à vous sorcières et sorciers !<br>Vous entrez dans"
-                + "le monde de Magie Magie ! Où vos grimoires, votre aptitude aux sortilèges et votre passion pour la magie"
+                + " le monde de Magie Magie ! Où vos grimoires, votre aptitude aux sortilèges et votre passion pour la magie"
                 + " seront mis à rude épreuve !<br><br><b>Préparez vos baguette, avec le regard tranchant, et devenez MAGIE !</b></html>";
         JLabel label = new JLabel(chaine);
         label.setPreferredSize(new Dimension((int) (getWidth()*0.8),(int) (getHeight()*0.8)));
@@ -132,112 +144,5 @@ public class InterfaceGraphique extends JFrame {
         label.setFont(font);
         this.container.add(label);
         
-    }
-    
-    public void affichePartiesEnPreparation(){
-        this.container.removeAll();
-        
-        List<Partie> listeParties = partieService.getPartiesEnPrepapration();
-
-        JPanel affichageListeParties = new JPanel();
-        affichageListeParties.setLayout(new BoxLayout(affichageListeParties, BoxLayout.X_AXIS));
-        
-        String nom_txt = "Partie";
-        String nombre_txt = "Nombre de joueurs";
-        String createur_txt = "Créateur de la partie";
-        String joueurs_txt = "Autres joueurs dans la partie";
-
-        JLabel nomPartie = new JLabel(nom_txt);
-        JLabel nombreJoueurs = new JLabel(nombre_txt);
-        JLabel pseudoCreateur = new JLabel(createur_txt);
-        JLabel pseudosJoueurs = new JLabel(joueurs_txt);
-        
-        JPanel panelPartieNom = new JPanel();
-        panelPartieNom.setLayout(new BoxLayout(panelPartieNom, BoxLayout.Y_AXIS));
-        panelPartieNom.add(nomPartie);
-        
-        JPanel panelNombreJoueur = new JPanel();
-        panelNombreJoueur.setLayout(new BoxLayout(panelNombreJoueur, BoxLayout.Y_AXIS));
-        panelNombreJoueur.add(nombreJoueurs);
-        
-        JPanel panelCreateurNom = new JPanel();
-        panelCreateurNom.setLayout(new BoxLayout(panelCreateurNom, BoxLayout.Y_AXIS));
-        panelCreateurNom.add(pseudoCreateur);
-        
-        JPanel panelJoueursNom = new JPanel();
-        panelJoueursNom.setLayout(new BoxLayout(panelJoueursNom, BoxLayout.Y_AXIS));
-        panelJoueursNom.add(pseudosJoueurs);
-        
-        JPanel panelBoutons= new JPanel();
-        panelBoutons.setLayout(new BoxLayout(panelBoutons, BoxLayout.Y_AXIS));
-        
-        
-        for (Partie partie : listeParties) {
-            
-            panelPartieNom.add(new JLabel(partie.getNom()));
-            panelNombreJoueur.add(new JLabel(partie.getJoueurs().size() + ""));
-            try {
-                panelCreateurNom.add(new JLabel(partieService.getJoueurByPosition(partie.getId(),0L).getPseudo()+ ""));        
-            } catch (Exception e) {
-                System.out.println("EXEVOTIN");
-            }
-                
-            
-            String chaineNomsJoueurs = "";
-            for (Joueur joueur : partie.getJoueurs())
-                if (joueur.getPosition() != 0L)
-                    chaineNomsJoueurs += joueur.getPseudo() + " - ";
-            
-            panelJoueursNom.add(new JLabel(chaineNomsJoueurs));
-            
-            // Ajout bouton rejoindre avec boite de dialogue pour récupérer pseudo & avatar du joueur 
-            JButton boutonRejoindre = new JButton("Rejoindre");
-            boutonRejoindre.addActionListener(new ActionListener() {
-                @Override
-            public void actionPerformed(ActionEvent e) {
-                JTextField pseudo = new JTextField(), avatar = new JTextField();
-
-                Object[] message = {
-                    "Username:", pseudo,
-                    "Avatar:", avatar
-                };
-                
-                int option = JOptionPane.showConfirmDialog(null, message, "Rejoindre " + partie.getNom(), JOptionPane.OK_CANCEL_OPTION);
-                if (option == JOptionPane.OK_OPTION)
-                     partieService.rejoindrePartie(pseudo.getText(), avatar.getText(), partie.getId());
-            }
-            });
-            
-            
-            panelBoutons.add(boutonRejoindre);
-        }
-        
-        affichageListeParties.add(panelPartieNom);
-        affichageListeParties.add(panelNombreJoueur);
-        affichageListeParties.add(panelCreateurNom);
-        affichageListeParties.add(panelJoueursNom);
-        affichageListeParties.add(panelBoutons);
-        
-        //Ajout dans le container
-        this.container.add(affichageListeParties);
-        revalidate();
-        repaint();
-    }
-    public void affichageParties(){
-        this.container.removeAll();
-        List<Partie> listeParties = partieService.getPartiesEnPrepapration();
-        
-        
-        JPanel panelAffichage = new JPanel();
-        panelAffichage.setLayout(new BoxLayout(panelAffichage, BoxLayout.Y_AXIS));
-        
-        panelAffichage.add(new PanelAffichageRejoindrePartie());
-        
-        for (Partie partie : listeParties)
-            panelAffichage.add(new PanelAffichageRejoindrePartie(partie));
-        
-        this.container.add(panelAffichage);
-        revalidate();
-        repaint();
     }
 }

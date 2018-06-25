@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
 /**
  * @author mama
  */
-public class PanelMainJoueur extends JPanel {
+public class PanelJoueurPrincipal extends JPanel {
     
     PartieService partieService = new PartieService();
     
@@ -27,7 +27,7 @@ public class PanelMainJoueur extends JPanel {
     ////////////////
     //      CONSTRUCTEUR
     ///////////////////////////
-    public PanelMainJoueur(Long idJoueur){
+    public PanelJoueurPrincipal(Long idJoueur){
         super(new BorderLayout());
         this.idJoueur = idJoueur; 
         

@@ -5,7 +5,7 @@
  */
 package atos.main.test;
 
-import atos.main.interfaceswing.panel.PanelMainJoueur;
+import atos.main.interfaceswing.panel.PanelJoueurPrincipal;
 import javax.swing.JFrame;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class InterfaceTest {
     public void testPanelJoueur(){
         
         JFrame fen = new JFrame();
-        fen.add(new PanelMainJoueur(1L));
+        fen.add(new PanelJoueurPrincipal(1L));
         fen.setVisible(true);
     }
     
