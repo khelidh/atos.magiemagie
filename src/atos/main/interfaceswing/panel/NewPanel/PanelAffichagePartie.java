@@ -54,13 +54,15 @@ public class PanelAffichagePartie extends JPanel{
         
         nomPartie = new JLabel(partie.getNom());
         nombreJoueurs = new JLabel(partie.getJoueurs().size() + "");
+        System.out.println("Partie id " + partie.getId());
         pseudoCreateur = new JLabel(partieService.getJoueurFirstPosition(partie.getId()).getPseudo());
         
         String chaineNomsJoueurs = "";
             for (Joueur joueur : partie.getJoueurs())
                 if (joueur.getPosition() != 0L)
                     chaineNomsJoueurs += joueur.getPseudo() + " - ";
-            
+        
+        
         pseudosJoueurs = new JLabel(chaineNomsJoueurs);
 
         this.add(nomPartie);

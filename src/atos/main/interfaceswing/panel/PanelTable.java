@@ -28,12 +28,14 @@ public class PanelTable extends JPanel {
     JoueurService joueurService = new JoueurService();
     
     // Variables d'instance
-    List<PanelBot> listeBots;
+    // List<PanelBot> listeBots;
     JPanel panelBots;
     PanelJoueurPrincipal panelJoueur;
     JPanel panelBoutons;
     TypeCarte selection1 = null, selection2 = null;
     Long idPartie;
+    boolean selectionCible;
+    Long idCible = null;
     
     ////////////////
     //      CONSTRUCTEUR(s)
@@ -54,9 +56,43 @@ public class PanelTable extends JPanel {
         
         
     // Initialisation des bots et du panel BOT
-       for (Joueur j : partie.getJoueurs())
-           if (j != joueurPrincipal)
-               panelBots.add(new PanelBot(j.getId()));
+       for(Joueur j : partie.getJoueurs())
+           if (j != joueurPrincipal){
+               PanelBot panel = new PanelBot(j.getId());
+               panel.addMouseListener(new MouseListener() {
+                   @Override
+                   public void mouseClicked(MouseEvent e) {
+                       if (true){
+                            if (idCible == null){
+                               idCible = panel.getIdBot();
+                               panel.setBackground(Color.red);
+                            } else if (idCible.equals(panel.getIdBot())){
+                                idCible = null;
+                                panel.setBackground(null);
+                            }
+                       }
+                   }
+
+                   @Override
+                   public void mousePressed(MouseEvent e) {
+                   }
+
+                   @Override
+                   public void mouseReleased(MouseEvent e) {
+                   }
+
+                   @Override
+                   public void mouseEntered(MouseEvent e) {
+                   }
+
+                   @Override
+                   public void mouseExited(MouseEvent e) {
+                   }
+               });
+               
+               panelBots.add(panel);
+           }
+               
            
     // Initialisation du panel des boutons de jeu
         panelBoutons = new JPanel();
@@ -85,6 +121,11 @@ public class PanelTable extends JPanel {
     }
     
     ////////////////
+    //      Méthode(s)
+    ///////////////////////////
+    
+    
+    ////////////////
     //      ActionListener
     ///////////////////////////
     
@@ -104,20 +145,17 @@ public class PanelTable extends JPanel {
                 String sort = partieService.determinerSort(selection1, selection1);
                 partieService.supprimerDeuxCartes(panelJoueur.getIdJoueur(), selection1, selection1);
                 
-                if (sort.equals(PartieService.SORT_HYPSNOSE) || sort.equals(PartieService.SORT_HYPSNOSE))
-                    selectionCible();
+                if (sort.equals(PartieService.SORT_HYPSNOSE) || sort.equals(PartieService.SORT_HYPSNOSE)){
+                    setSelectionCible(true);
+                    //partieService.lancerSortPANEL(, idCible, 5L ,sort);
+                    
+                }
                 
                 partieService.lancerSort(panelJoueur.getIdJoueur(), sort);
             }
         }
-
-        private void selectionCible() {
-            
-            
-        }
  };
-        
-   
+    
     
     ////////////////
     //      Mouse Listener
@@ -191,6 +229,24 @@ public class PanelTable extends JPanel {
     public void setIdPartie(Long idPartie) {
         this.idPartie = idPartie;
     }
+
+    public boolean isSelectionCible() {
+        return selectionCible;
+    }
+
+    public void setSelectionCible(boolean selectionCible) {
+        this.selectionCible = selectionCible;
+    }
+
+    public Long getIdCible() {
+        return idCible;
+    }
+
+    public void setIdCible(Long idCible) {
+        this.idCible = idCible;
+    }
+    
+    
      
     
 }

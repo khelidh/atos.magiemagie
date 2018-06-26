@@ -40,11 +40,7 @@ public class PanelAffichageAllRejoindre extends JPanel implements MouseListener{
                 maj();
             }
         });
-        
         boutonRejoindre = new JButton("- Rejoindre la partie sélectionnée -");
-        
-        
-        
         
         List<Partie> listeParties = partieService.getPartiesEnPrepapration();
         

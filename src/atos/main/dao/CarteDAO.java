@@ -26,10 +26,17 @@ public class CarteDAO {
         em.persist(carte);
         em.getTransaction().commit();  
     }
-    public void delete(Carte carte) {
+    public void delete(Carte carte){
         EntityManager em = makeEM();
         em.getTransaction().begin();
         em.remove(em.merge(carte));
+        em.getTransaction().commit(); 
+    }
+    public void deleteWithFind(Long id){
+        EntityManager em = makeEM();
+        em.getTransaction().begin();
+        Carte c = em.find(Carte.class, id);
+        em.remove(c);
         em.getTransaction().commit(); 
     }
     public void update(Carte carte){
@@ -69,9 +76,10 @@ public class CarteDAO {
                 + "     AND c.type = :typeCarte";
         
         Query query = makeEM().createQuery(requete);
-        query.setMaxResults(1);
+        query.setParameter("idJoueur", idJoueur);
+        query.setParameter("typeCarte", type);
         
-        return (Carte) query.getSingleResult();
+        return (Carte) query.setMaxResults(1).getSingleResult();
     }
 }
 

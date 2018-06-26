@@ -7,7 +7,6 @@ package atos.main.interfaceswing.panel.NewPanel;
 
 import atos.main.entity.Partie;
 import atos.main.interfaceswing.menu.Menu;
-import atos.main.interfaceswing.panel.PanelAffichageAllRejoindre;
 import atos.main.interfaceswing.panel.PanelCreerPartie;
 import atos.main.interfaceswing.panel.PanelTable;
 import atos.main.service.JoueurService;
@@ -88,9 +87,9 @@ public class Fenetre extends JFrame {
     ActionListener boutonRejoindreTableListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            Long id = ((PanelRejoindrePartie) affichageRejoindre).getPanelSectionne().getIdPartie();
-            System.out.println("boutonRejoindreTableListener id = " + id);
-            Partie partie = partieService.getPartie(id);
+            Long idPartie = ((PanelRejoindrePartie) affichageRejoindre).getPanelSectionne().getIdPartie();
+            System.out.println("boutonRejoindreTableListener id = " + idPartie);
+            Partie partie = partieService.getPartie(idPartie);
             
             JTextField pseudo = new JTextField(), avatar = new JTextField();
             Object[] message = {
@@ -105,10 +104,10 @@ public class Fenetre extends JFrame {
 
                 int optionCommencer = JOptionPane.showConfirmDialog(null, mess, "Commencer " + partie.getNom(), JOptionPane.YES_NO_OPTION);
 
-                if (optionCommencer == JOptionPane.YES_OPTION) {
+                if (optionCommencer == JOptionPane.YES_OPTION){
                     partieService.demarrer(partie.getId());
                     partieService.distribuer(partie.getId());
-                    Long idJoueur = partieService.getJoueurFirstPosition(id).getId();
+                    Long idJoueur = partieService.getJoueurFirstPosition(idPartie).getId();
 
                     PanelTable table = new PanelTable(idJoueur);
                     container.removeAll();
@@ -117,7 +116,6 @@ public class Fenetre extends JFrame {
                     container.repaint();
                 }
             }
-
         }
     };
     ActionListener boutonCreationPartieListener = new ActionListener() {

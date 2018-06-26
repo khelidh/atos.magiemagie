@@ -399,6 +399,33 @@ public class PartieService {
             }
         }
     }
+    public void lancerSortPANEL(Long idJoueur, Long idCible, Long idCarte, String sort) {
+        switch (sort) {
+            case (SORT_FAILED): {
+                break;
+            }
+            case (SORT_INVISIBILITE): {
+                lancerSortInvisibilite(idJoueur);
+                break;
+            }
+            case (SORT_HYPSNOSE): {
+                lancerSortHypnosePANEL(idJoueur, idCible, idCarte);
+                break;
+            }
+            case (SORT_DIVINATION): {
+                lancerSortDivination(idJoueur);
+                break;
+            }
+            case (SORT_SOMMEIL_PROFOND): {
+                lancerSortSommeil(idCible);
+                break;
+            }
+            case (SORT_FILTRE_AMOUR): {
+                lancerSortFiltreAmour(idJoueur, idCible);
+                break;
+            }
+        }
+    }
 
     public void lancerSortInvisibilite(Long idJoueur) {
         Joueur joueur = getJoueur(idJoueur);
@@ -469,13 +496,13 @@ public class PartieService {
     }
 
     // SANS SOUT et selectionCible // Interface
-    public void lancerSortHypnosePANEL(Long idJoueur, TypeCarte joueurSelectionCarteType, Long idCible) {
+    public void lancerSortHypnosePANEL(Long idJoueur, Long idCible, Long idCarte) {
         boolean cibleEliminee = false;
 
         Joueur joueur = getJoueur(idJoueur);
         Joueur cible = getJoueur(idCible);
 
-        Carte carteJoueur = carteDAO.getCarte(idJoueur, joueurSelectionCarteType);
+        Carte carteJoueur = carteDAO.getCarte(idJoueur, TypeCarte.AILE_DE_CHAUVE_SOURIS);
         
         int nombreCarteCible = cible.getCartes().size();
         
@@ -487,6 +514,7 @@ public class PartieService {
 
                 Carte carteVolee = cible.getCartes().remove(indiceCarte);
                 carteVolee.setJoueur(joueur);
+                joueur.getCartes().add(carteVolee);
                 nombreCarteCible--;
                 serviceCarte.updateCarte(carteVolee);
             } else {
@@ -501,11 +529,9 @@ public class PartieService {
             eliminerJoueur(idCible);
         } else {
             carteJoueur.setJoueur(cible);
+            cible.getCartes().add(carteJoueur);
             serviceCarte.updateCarte(carteJoueur);
         }
-
-//        serviceJoueur.updateJoueur(cible);
-//        serviceJoueur.updateJoueur(joueur);
     }
     
     public void lancerSortFiltreAmour(Long idJoueur, Long idCible) {

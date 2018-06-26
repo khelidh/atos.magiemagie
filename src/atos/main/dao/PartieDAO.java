@@ -210,15 +210,15 @@ public class PartieDAO {
                 + "             JOIN j.partie p"
                 + "             WHERE p.id = :idPartie)";
         
-        Query query = makeEM().createQuery(requete2);
+        
+        Query query = makeEM().createQuery(requete);
         query.setParameter("idPartie", idPartie);
         
-        //query.setMaxResults(1);
-        
+        query.setMaxResults(1);
         return (Joueur) query.getSingleResult();
     }
 
-    public Joueur findJoueurALaMain(Long idPartie) {
+    public Joueur findJoueurALaMain(Long idPartie){
         String requete = "SELECT j FROM Joueur j"
                 + "     JOIN j.partie p"
                 + "     WHERE p.id = :idPartie"
