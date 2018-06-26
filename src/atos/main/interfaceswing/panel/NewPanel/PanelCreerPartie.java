@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package atos.main.interfaceswing.panel;
+package atos.main.interfaceswing.panel.NewPanel;
 
 import atos.main.service.PartieService;
 import java.awt.BorderLayout;
@@ -75,7 +75,7 @@ public class PanelCreerPartie extends JPanel{
    
         
         this.boutonReset.addActionListener(boutonResetListener);
-        this.boutonValider.addActionListener(boutonValiderListener);
+        //this.boutonValider.addActionListener(boutonValiderListener);
     }
     
     public void resetAll(){
@@ -106,4 +106,15 @@ public class PanelCreerPartie extends JPanel{
             valider();
         }
     };
+
+    public JButton getBoutonValider() {
+        return boutonValider;
+    }
+
+    public void setBoutonValider(JButton boutonValider) {
+        this.boutonValider = boutonValider;
+    }
+    
+    
+    
 }

@@ -65,6 +65,14 @@ public class PanelJoueurPrincipal extends JPanel {
         this.add(main, BorderLayout.SOUTH);
     }
     
+    public void changementJoueur(Long idJoueur){
+        setIdJoueur(idJoueur);
+        setEntete();
+        setQuantite();
+        revalidate();
+        repaint();
+    }
+    
     ////////////////
     //      GET & SET - ERS
     ///////////////////////////
@@ -129,6 +137,18 @@ public class PanelJoueurPrincipal extends JPanel {
         }
 
         
+    }
+    public void setEntete(){
+        Joueur joueur = partieService.getJoueur(idJoueur);
+        Partie partie = joueur.getPartie();
+        
+        this.pseudoLabel.setText(joueur.getPseudo());
+        
+        String nombreJoueurs = " " + partieService.getJoueurs(partie.getId()).size();
+        this.nombreJoueursRestantsLabel.setText(nombreJoueurs);
+        
+        String tourJoueur = partieService.getJoueurALaMain(partie.getId()).getPseudo();
+        this.tourLabel.setText(tourJoueur);
     }
     public void setEntete(Long idJoueur){
         Joueur joueur = partieService.getJoueur(idJoueur);

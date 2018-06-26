@@ -16,6 +16,7 @@ import java.awt.event.MouseListener;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -36,6 +37,7 @@ public class PanelTable extends JPanel {
     Long idPartie;
     boolean selectionCible;
     Long idCible = null;
+    private JLabel aide;
     
     ////////////////
     //      CONSTRUCTEUR(s)
@@ -113,17 +115,30 @@ public class PanelTable extends JPanel {
         panelJoueur.carteCorne.addMouseListener(carteSelectionListener);
         panelJoueur.carteLapis.addMouseListener(carteSelectionListener);
         panelJoueur.carteMandragore.addMouseListener(carteSelectionListener);
+    
+    // Initialisation de l'affichage aide
+        aide = new JLabel("aide");
+        
+        
+        
         
     // Ajout à this (PanelTable)
         this.add(panelBots, BorderLayout.NORTH);
         this.add(panelJoueur, BorderLayout.CENTER);
-        this.add(panelBoutons, BorderLayout.SOUTH);
+        
+        JPanel south = new JPanel(new BorderLayout());
+        
+        south.add(aide, BorderLayout.NORTH);
+        south.add(panelBoutons, BorderLayout.SOUTH);
+        this.add(south, BorderLayout.SOUTH);
     }
     
     ////////////////
     //      Méthode(s)
     ///////////////////////////
-    
+    public void setAide(String aideString){
+        aide.setText(aideString);
+    }
     
     ////////////////
     //      ActionListener

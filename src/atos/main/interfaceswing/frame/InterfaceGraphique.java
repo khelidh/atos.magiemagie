@@ -3,7 +3,7 @@ package atos.main.interfaceswing.frame;
 import atos.main.interfaceswing.menu.Menu;
 import atos.main.interfaceswing.panel.PanelAffichageAllRejoindre;
 import atos.main.interfaceswing.panel.PanelAffichageRejoindrePartie;
-import atos.main.interfaceswing.panel.PanelCreerPartie;
+import atos.main.interfaceswing.panel.NewPanel.PanelCreerPartie;
 import atos.main.interfaceswing.panel.PanelTable;
 import atos.main.service.JoueurService;
 import atos.main.service.PartieService;

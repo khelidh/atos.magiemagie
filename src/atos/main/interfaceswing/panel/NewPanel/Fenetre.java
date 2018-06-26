@@ -7,7 +7,6 @@ package atos.main.interfaceswing.panel.NewPanel;
 
 import atos.main.entity.Partie;
 import atos.main.interfaceswing.menu.Menu;
-import atos.main.interfaceswing.panel.PanelCreerPartie;
 import atos.main.interfaceswing.panel.PanelTable;
 import atos.main.service.JoueurService;
 import atos.main.service.PartieService;
@@ -37,7 +36,9 @@ public class Fenetre extends JFrame {
     JoueurService joueurService = new JoueurService();
 
     JPanel container, entete;
-    JPanel tableDeJeu, affichageRejoindre, affichageCreer;
+    PanelCreerPartie affichageCreer;
+    PanelRejoindrePartie affichageRejoindre;
+    PanelTable tableDeJeu;
     Menu menu;
     
      ////////////////
@@ -66,7 +67,9 @@ public class Fenetre extends JFrame {
         affichageCreer = new PanelCreerPartie();
         affichageRejoindre = new PanelRejoindrePartie();
         ((PanelRejoindrePartie) affichageRejoindre).getBoutonRejoindre().addActionListener(boutonRejoindreTableListener);
-
+        
+        ((PanelCreerPartie) affichageCreer).getBoutonValider().addActionListener(boutonValiderCreationListener);
+        
         initialisationMenu();
         initEntete();
         initContainer();
@@ -116,6 +119,22 @@ public class Fenetre extends JFrame {
                     container.repaint();
                 }
             }
+        }
+    };
+    
+    
+   
+    
+    
+    
+    ActionListener boutonValiderCreationListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            affichageCreer.valider();
+            container.removeAll();
+            initContainer();
+            container.revalidate();
+            container.repaint();
         }
     };
     ActionListener boutonCreationPartieListener = new ActionListener() {

@@ -55,6 +55,11 @@ public class PanelBot extends JPanel{
         
     }
     
+    public void changementBot(Long idBot){
+        setIdBot(idBot);
+        setInformations();
+    }
+    
     ///////////////////
     //          GET & SET
     //////////////////////////////////
