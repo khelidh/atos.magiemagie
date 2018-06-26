@@ -36,14 +36,14 @@ public class PanelBot extends JPanel{
         this.quantite = new JLabel("", SwingConstants.CENTER);
         this.pseudo = new JLabel("", SwingConstants.CENTER);
         
-        this.setInformations(idBot);
+        this.setInformations();
         
         this.add(pseudo, BorderLayout.NORTH);
         this.add(carte, BorderLayout.CENTER);
         this.add(quantite, BorderLayout.SOUTH);
     }
     
-    public void setInformations(Long idBot){
+    public void setInformations(){
         Joueur bot = partieService.getJoueur(idBot);
         
         this.quantite.setText("" + bot.getCartes().size());
@@ -54,4 +54,18 @@ public class PanelBot extends JPanel{
         
         
     }
+    
+    ///////////////////
+    //          GET & SET
+    //////////////////////////////////
+
+    public Long getIdBot() {
+        return idBot;
+    }
+
+    public void setIdBot(Long idBot) {
+        this.idBot = idBot;
+    }
+    
+    
 }

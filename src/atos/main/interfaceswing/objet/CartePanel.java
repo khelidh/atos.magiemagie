@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package atos.main.interfaceswing.objet;
 
 import atos.main.entity.Carte.TypeCarte;
@@ -30,7 +25,8 @@ public class CartePanel extends JPanel{
         this.type = type;
         
         String cheminCarteMandragore = "/atos/main/interfaceswing/image/carte_mandragore.png";
-        this.imgICON = new ImageIcon(getClass().getResource(cheminCarteMandragore));
+        String cheminCarteCorneDeLicorne = "/atos/main/interfaceswing/image/carte_corne_de_licorne.png";
+        this.imgICON = new ImageIcon(getClass().getResource(cheminCarteCorneDeLicorne));
         Image image = imgICON.getImage();
         image = image.getScaledInstance(150,200, java.awt.Image.SCALE_SMOOTH);
         this.imgICON = new ImageIcon(image);

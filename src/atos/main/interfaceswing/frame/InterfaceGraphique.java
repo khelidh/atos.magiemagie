@@ -1,7 +1,5 @@
 package atos.main.interfaceswing.frame;
 
-import atos.main.entity.Joueur;
-import atos.main.entity.Partie;
 import atos.main.interfaceswing.menu.Menu;
 import atos.main.interfaceswing.panel.PanelAffichageAllRejoindre;
 import atos.main.interfaceswing.panel.PanelAffichageRejoindrePartie;
@@ -11,24 +9,19 @@ import atos.main.service.JoueurService;
 import atos.main.service.PartieService;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.List;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 /**
  * @author mama
@@ -54,7 +47,7 @@ public class InterfaceGraphique extends JFrame {
         int width = screenSize.width;
         
         // Initialisation de la fenêtre
-        setSize(800, 650);
+        setSize(700, 8000);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         
@@ -64,11 +57,11 @@ public class InterfaceGraphique extends JFrame {
         
         affichageCreer = new PanelCreerPartie();
         affichageRejoindre = new PanelAffichageAllRejoindre();
-        
 
         initialisationMenu();
         initEntete();
         initContainer();
+        
         
         container.setBackground(new Color(237, 50 , 50));
         entete.setBackground(new Color(255, 255 , 255));
@@ -79,7 +72,7 @@ public class InterfaceGraphique extends JFrame {
         
         setVisible(true);
     }
-    
+   
     ActionListener boutonCreationPartieListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -121,7 +114,7 @@ public class InterfaceGraphique extends JFrame {
             System.exit(0);
         }
     };
-
+    
     private void initialisationMenu() {
         this.menu.getItemCreationPartie().addActionListener(boutonCreationPartieListener);
         this.menu.getItemRejoindrePartie().addActionListener(boutonRejoindrePartieListener);
@@ -139,10 +132,9 @@ public class InterfaceGraphique extends JFrame {
                 + " le monde de Magie Magie ! Où vos grimoires, votre aptitude aux sortilèges et votre passion pour la magie"
                 + " seront mis à rude épreuve !<br><br><b>Préparez vos baguette, avec le regard tranchant, et devenez MAGIE !</b></html>";
         JLabel label = new JLabel(chaine);
-        label.setPreferredSize(new Dimension((int) (getWidth()*0.8),(int) (getHeight()*0.8)));
+        label.setPreferredSize(new Dimension(500,500));
         Font font = new Font("Century", Font.CENTER_BASELINE, 25);
         label.setFont(font);
         this.container.add(label);
-        
     }
 }

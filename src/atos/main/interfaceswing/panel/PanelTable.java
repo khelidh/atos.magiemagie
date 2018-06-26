@@ -9,12 +9,10 @@ import atos.main.service.JoueurService;
 import atos.main.service.PartieService;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -36,7 +34,6 @@ public class PanelTable extends JPanel {
     JPanel panelBoutons;
     TypeCarte selection1 = null, selection2 = null;
     Long idPartie;
-    
     
     ////////////////
     //      CONSTRUCTEUR(s)
@@ -74,18 +71,12 @@ public class PanelTable extends JPanel {
         panelBoutons.add(boutonPasserTour);
                 
     // Initialisation du panel Joueur principal
-        panelJoueur = new PanelJoueurPrincipal(2L);
+        panelJoueur = new PanelJoueurPrincipal(idJoueur);
         panelJoueur.carteAile.addMouseListener(carteSelectionListener);
         panelJoueur.carteBave.addMouseListener(carteSelectionListener);
         panelJoueur.carteCorne.addMouseListener(carteSelectionListener);
         panelJoueur.carteLapis.addMouseListener(carteSelectionListener);
         panelJoueur.carteMandragore.addMouseListener(carteSelectionListener);
-        
-        
-        
-        
-        
-                
         
     // Ajout à this (PanelTable)
         this.add(panelBots, BorderLayout.NORTH);
@@ -107,14 +98,26 @@ public class PanelTable extends JPanel {
     ActionListener boutonLancerListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (selection1 != null && selection2 != null) {
-                partieService.jouerSortPANEL(panelJoueur.getIdJoueur(), selection1, selection2);
+            if (selection1 != null && selection2 != null){
+                partieService.jouerSortPANEL(panelJoueur.getIdJoueur(), selection1, selection1);
                 
-                // SET PANEL 
-                //partieService.jouer(partieService.getNextDealer(idJoueur).getId());
+                String sort = partieService.determinerSort(selection1, selection1);
+                partieService.supprimerDeuxCartes(panelJoueur.getIdJoueur(), selection1, selection1);
+                
+                if (sort.equals(PartieService.SORT_HYPSNOSE) || sort.equals(PartieService.SORT_HYPSNOSE))
+                    selectionCible();
+                
+                partieService.lancerSort(panelJoueur.getIdJoueur(), sort);
             }
         }
-    };
+
+        private void selectionCible() {
+            
+            
+        }
+ };
+        
+   
     
     ////////////////
     //      Mouse Listener
@@ -122,6 +125,7 @@ public class PanelTable extends JPanel {
     MouseListener carteSelectionListener = new MouseListener() {
         @Override
         public void mouseClicked(MouseEvent e) {
+            System.out.println("dzlql");
             setSelection((CartePanel) e.getSource());
         }
         @Override
